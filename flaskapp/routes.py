@@ -1,8 +1,8 @@
-from flask import Flask, render_template, url_for, flash, redirect
-from forms import RegistrationForm, LoginForm
-app = Flask(__name__)
+from flask import render_template, url_for, flash, redirect
+from flaskapp import app
+from flaskapp.forms import RegistrationForm, LoginForm
+from flaskapp.models import User, Project
 
-app.config['SECRET_KEY'] = '22d6a8cc268a1deffba6bdbfb1b9966b'
 
 @app.route("/")
 @app.route("/home")
@@ -29,6 +29,3 @@ def login():
             flash('Login Unsuccessful. Please check email/password', 'danger')
 
     return render_template('login.html', title="Login", form=form)
-
-if __name__ == '__main__':
-    app.run(debug=True)
