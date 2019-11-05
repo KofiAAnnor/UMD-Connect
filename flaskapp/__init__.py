@@ -15,4 +15,13 @@ login_manager = LoginManager(app)
 login_manager.login_view = 'login'
 login_manager.login_message_category = 'info'
 
+
 from flaskapp import routes
+from flaskapp.models import User
+
+db.drop_all()
+db.create_all()
+
+admin = User(username='admin', email='admin@admin.com', password="admin")
+db.session.add(admin)
+db.session.commit()
