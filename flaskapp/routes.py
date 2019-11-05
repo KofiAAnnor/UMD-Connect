@@ -56,3 +56,11 @@ def logout():
 @login_required
 def profile():
     return render_template('profile.html', title='Profile')
+
+@app.route("/delete_account",methods=["POST"])
+def delete_account():
+    email=request.form['email']
+    user=User.query.filter_by(email=request.form['email']).first()
+    db.session.delete(user)
+    db.session.commit()
+    return logout()
