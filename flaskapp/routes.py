@@ -56,3 +56,9 @@ def logout():
 @login_required
 def profile():
     return render_template('profile.html', title='Profile')
+
+
+@app.route("/project-board")
+@login_required
+def project_board_page():
+    return render_template('project-board.html', title='Project Board')
