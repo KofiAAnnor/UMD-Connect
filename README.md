@@ -6,14 +6,14 @@ Final semester project for CMSC435 Fall 2019.
 
 1. Create your virtual environment.
 
-- For virtualenv:
+For virtualenv:
 
-    $ python3 -m venv venv
-    $ source venv/bin/activate
+        $ python3 -m venv venv
+        $ source venv/bin/activate
 
 2. Install the application requirements with pip:
 
-    $ pip install -r requirements.txt
+        $ pip install -r requirements.txt
 
 ## Running the application
 
