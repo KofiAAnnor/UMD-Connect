@@ -1,6 +1,6 @@
 from flask import render_template, url_for, flash, redirect, request
 from flaskapp import app, db, bcrypt
-from flaskapp.forms import RegistrationForm, LoginForm
+from flaskapp.forms import RegistrationForm, LoginForm,UpdateForm
 from flaskapp.models import User, Project
 from flask_login import login_user, current_user, logout_user, login_required
 
@@ -58,9 +58,29 @@ def profile():
     return render_template('profile.html', title='Profile')
 
 @app.route("/delete_account",methods=["POST"])
+@login_required
 def delete_account():
-    email=request.form['email']
     user=User.query.filter_by(email=request.form['email']).first()
     db.session.delete(user)
     db.session.commit()
     return logout()
+
+@app.route("/update",methods=["POST",'GET'])
+def update():
+    form=UpdateForm()
+    if form.validate_on_submit():
+        user = User.query.filter_by(email=current_user.email).first()
+        if bcrypt.check_password_hash(user.password, form.old_password.data):
+            if form.new_email.data :
+                user.email=form.new_email.data
+            if form.username.data:
+                user.username=form.username.data
+            if form.skills.data:
+                user.skills = form.skills.data
+            if form.new_password.data:
+                hashed_password = bcrypt.generate_password_hash(form.new_password.data).decode('utf-8')
+                user.password = hashed_password
+            db.session.commit()
+            flash(f'Your account has been updated.', 'success')
+            return redirect(url_for('profile'))
+    return render_template('update.html', title='Update',form=form)
