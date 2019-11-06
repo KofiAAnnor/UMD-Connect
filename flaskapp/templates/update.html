@@ -32,9 +32,18 @@
                         {{ form.new_email(class="form-control form-control-lg",placeholder=current_user.email) }}
                     {% endif %}
                 </div>
-                <div class="form-group">
-                    {{ form.skills.label(class="form-control-label") }}
-                    {{ form.skills(class="form-control form-control-lg",placeholder=current_user.skills) }}
+                Skills <br>
+                <div class="form-check">
+                    {{ form.skills_bus(class="form-check-input") }}
+                    {{ form.skills_bus.label(class="form-check-label") }}<br>
+                    {{ form.skills_lit(class="form-check-input") }}
+                    {{ form.skills_lit.label(class="form-check-label") }}<br>
+                    {{ form.skills_tech(class="form-check-input") }}
+                    {{ form.skills_tech.label(class="form-check-label") }}<br>
+                    {{ form.skills_art(class="form-check-input") }}
+                    {{ form.skills_art.label(class="form-check-label") }}<br>
+                    {{ form.skills_music(class="form-check-input") }}
+                    {{ form.skills_music.label(class="form-check-label") }}
                 </div>
                 <div class="form-group">
                     {{ form.new_password.label(class="form-control-label") }}
