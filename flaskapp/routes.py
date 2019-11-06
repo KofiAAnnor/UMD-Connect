@@ -66,6 +66,7 @@ def delete_account():
     return logout()
 
 @app.route("/update",methods=["POST",'GET'])
+@login_required
 def update():
     form=UpdateForm()
     if form.validate_on_submit():
@@ -83,4 +84,6 @@ def update():
             db.session.commit()
             flash(f'Your account has been updated.', 'success')
             return redirect(url_for('profile'))
+        else:
+            flash('Incorrect. Please check password', 'danger')
     return render_template('update.html', title='Update',form=form)

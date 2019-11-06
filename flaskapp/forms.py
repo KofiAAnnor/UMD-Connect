@@ -44,12 +44,13 @@ class UpdateForm(FlaskForm):
                                      validators=[EqualTo('new_password')])
     old_password = PasswordField('Enter Password to Update',validators=[DataRequired()])
     submit = SubmitField('Update')
+
     def validate_username(self, username):
         user = User.query.filter_by(username=username.data).first()
         if user:
             raise ValidationError('That username is taken. Please choose a different one.')
 
-    def validate_email(self, email):
-        user = User.query.filter_by(email=email.data).first()
+    def validate_new_email(self, new_email):
+        user = User.query.filter_by(email=new_email.data).first()
         if user:
             raise ValidationError('That email is taken. Please choose a different one.')
