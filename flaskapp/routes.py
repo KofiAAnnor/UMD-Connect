@@ -55,4 +55,6 @@ def logout():
 @app.route("/profile")
 @login_required
 def profile():
+    cur = db.get_db().execute("SELECT * FROM User")
+
     return render_template('profile.html', title='Profile')

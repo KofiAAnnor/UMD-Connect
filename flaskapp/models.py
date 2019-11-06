@@ -29,3 +29,50 @@ class Project(db.Model):
 
     def __repr__(self):
         return f"Project('{self.title}', '{self.date_posted}', '{self.content}')"
+
+
+
+#   THESE TABLES ARE USED TO STORE THE PROJECTS AND USERS THAT CORRESPOND TO A CERTAIN TAG
+#   THE PREDEFINED TAGS ARE Business, Literature, Technology, Art, Music
+#   THE TITLE COLUMN IS EITHER "PROJECT" OR "USER" AND THE ID COLUMN IS THE ID OF THE PROJECT/USER
+#   THESE TABLES CAN COME IN HANDY WHEN SEARCHING FOR PROJECTS/USERS BASED ON TAGS
+
+
+class Business(db.Model):
+    type = db.Column(db.String(100), nullable=False)
+    id = db.Column(db.Integer, primary_key=True)
+
+    def __repr__(self):
+        return f"Business('{self.type}', '{self.id}')"
+
+
+class Literature(db.Model):
+    type = db.Column(db.String(100), nullable=False)
+    id = db.Column(db.Integer, primary_key=True)
+
+    def __repr__(self):
+        return f"Literature('{self.type}', '{self.id}')"
+
+
+class Technology(db.Model):
+    type = db.Column(db.String(100), nullable=False)
+    id = db.Column(db.Integer, primary_key=True)
+
+    def __repr__(self):
+        return f"Technology('{self.type}', '{self.id}')"
+
+
+class Art(db.Model):
+    type = db.Column(db.String(100), nullable=False)
+    id = db.Column(db.Integer, primary_key=True)
+
+    def __repr__(self):
+        return f"Art('{self.type}', '{self.id}')"
+
+
+class Music(db.Model):
+    type = db.Column(db.String(100), nullable=False)
+    id = db.Column(db.Integer, primary_key=True)
+
+    def __repr__(self):
+        return f"Music('{self.type}', '{self.id}')"
