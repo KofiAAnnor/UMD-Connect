@@ -1,7 +1,7 @@
 from flask import render_template, url_for, flash, redirect, request
 from flaskapp import app, db, bcrypt
 from flaskapp.forms import RegistrationForm, LoginForm,UpdateForm
-from flaskapp.models import User, Project
+from flaskapp.models import User, Project, Business, Technology, Literature, Art, Music
 from flask_login import login_user, current_user, logout_user, login_required
 
 
@@ -55,7 +55,16 @@ def logout():
 @app.route("/profile")
 @login_required
 def profile():
-    return render_template('profile.html', title='Profile')
+    user = User.query.filter_by(email=current_user.email).first()
+    tags = {
+        "BusinessTag": Business.query.filter_by(id=user.id).first(),
+        "LiteratureTag": Literature.query.filter_by(id=user.id).first(),
+        "TechnologyTag":  Technology.query.filter_by(id=user.id).first(),
+        "ArtTag":  Art.query.filter_by(id=user.id).first(),
+        "MusicTag":  Music.query.filter_by(id=user.id).first(),
+    }
+    return render_template('profile.html', title='Profile', skillTags=tags)
+
 
 @app.route("/delete_account",methods=["POST"])
 @login_required
