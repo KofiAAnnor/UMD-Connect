@@ -57,11 +57,11 @@ def logout():
 def profile():
     user = User.query.filter_by(email=current_user.email).first()
     tags = {
-        "BusinessTag": Business.query.filter_by(id=user.id).first(),
-        "LiteratureTag": Literature.query.filter_by(id=user.id).first(),
-        "TechnologyTag":  Technology.query.filter_by(id=user.id).first(),
-        "ArtTag":  Art.query.filter_by(id=user.id).first(),
-        "MusicTag":  Music.query.filter_by(id=user.id).first(),
+        "BusinessTag": Business.query.filter_by(name=user.username).first(),
+        "LiteratureTag": Literature.query.filter_by(name=user.username).first(),
+        "TechnologyTag":  Technology.query.filter_by(name=user.username).first(),
+        "ArtTag":  Art.query.filter_by(name=user.username).first(),
+        "MusicTag":  Music.query.filter_by(name=user.username).first(),
     }
     return render_template('profile.html', title='Profile', skillTags=tags)
 

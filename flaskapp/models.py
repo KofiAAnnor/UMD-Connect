@@ -39,39 +39,39 @@ class Project(db.Model):
 
 class Business(db.Model):
     type = db.Column(db.String(100), nullable=False)
-    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100), primary_key=True, unique=True, nullable=False)
 
     def __repr__(self):
-        return f"Business('{self.type}', '{self.id}')"
+        return f"Business('{self.type}', '{self.name}')"
 
 
 class Literature(db.Model):
     type = db.Column(db.String(100), nullable=False)
-    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100), primary_key=True, unique=True, nullable=False)
 
     def __repr__(self):
-        return f"Literature('{self.type}', '{self.id}')"
+        return f"Literature('{self.type}', '{self.name}')"
 
 
 class Technology(db.Model):
     type = db.Column(db.String(100), nullable=False)
-    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100), primary_key=True, unique=True, nullable=False)
 
     def __repr__(self):
-        return f"Technology('{self.type}', '{self.id}')"
+        return f"Technology('{self.type}', '{self.name}')"
 
 
 class Art(db.Model):
     type = db.Column(db.String(100), nullable=False)
-    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100), primary_key=True, unique=True, nullable=False)
 
     def __repr__(self):
-        return f"Art('{self.type}', '{self.id}')"
+        return f"Art('{self.type}', '{self.name}')"
 
 
 class Music(db.Model):
     type = db.Column(db.String(100), nullable=False)
-    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100), primary_key=True, unique=True, nullable=False)
 
     def __repr__(self):
-        return f"Music('{self.type}', '{self.id}')"
+        return f"Music('{self.type}', '{self.name}')"
