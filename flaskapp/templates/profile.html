@@ -5,7 +5,13 @@
       <hr>
         UserID: {{current_user.id}} <br>
         Email: {{current_user.email}} <br>
-        Skills: {{current_user.skills}}
+        <span class="badge badge-dark">SKILLS:</span>
+        {% if skillTags.BusinessTag != None %} <span class="badge badge-primary">Business</span>{% endif %}
+        {% if skillTags.LiteratureTag != None %} <span class="badge badge-info">Literature</span>{% endif %}
+        {% if skillTags.TechnologyTag != None %} <span class="badge badge-success">Technology</span>{% endif %}
+        {% if skillTags.ArtTag != None %} <span class="badge badge-warning">Art</span>{% endif %}
+        {% if skillTags.MusicTag != None %} <span class="badge badge-danger">Music</span>{% endif %}
+
     </div>
     <br>
     <a class="btn btn-outline-info" href="{{ url_for('update') }}">Update Profile</a>
