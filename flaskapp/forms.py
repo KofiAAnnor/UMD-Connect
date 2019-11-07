@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
 from flaskapp.models import User
-from wtforms import StringField, PasswordField, SubmitField, BooleanField
+from wtforms import StringField, PasswordField, SubmitField, BooleanField,TextAreaField,RadioField
 from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError,Optional
 
 
@@ -37,7 +37,7 @@ class UpdateForm(FlaskForm):
                            validators=[Length(min=2,max=20),Optional()])
     new_email = StringField('New Email',
                         validators=[Email(),Optional()])
-    about = StringField('About Me',validators=[Optional()])
+    about = TextAreaField('About Me',validators=[Optional()])
     skills_bus = BooleanField('Business')
     skills_lit = BooleanField('Literature')
     skills_tech=BooleanField('Technology')
@@ -59,3 +59,12 @@ class UpdateForm(FlaskForm):
         if user:
             raise ValidationError('That email is taken. Please choose a different one.')
 
+class SearchForm(FlaskForm):
+    name=StringField("Name", validators=[Length(min=2,max=20)])
+    type=RadioField ("Type", choices=[('User','User'),('Project','Project')],validators=[DataRequired()] )
+    skills_bus = BooleanField('Business')
+    skills_lit = BooleanField('Literature')
+    skills_tech = BooleanField('Technology')
+    skills_art = BooleanField('Art')
+    skills_music = BooleanField('Music')
+    submit=SubmitField("Search")

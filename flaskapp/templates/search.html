@@ -1,0 +1,39 @@
+{% extends "layout.html" %}
+{% block content %}
+    <div class="container">
+        <form method="POST" action="">
+            <div class="form-group">
+                {{ form.name.label(class="form-control-label") }}
+                {{ form.name(class="form-control form-control-lg") }}
+            </div>
+            <tr>
+                <td>{{form.skills_bus}} {{form.skills_bus.label}}</td>
+                <td>{{form.skills_lit}} {{form.skills_lit.label}}</td>
+                <td>{{form.skills_tech}} {{form.skills_tech.label}}</td>
+                <td>{{form.skills_art}} {{form.skills_art.label}}</td>
+                <td>{{form.skills_music}} {{form.skills_music.label}}</td>
+            </tr><br>
+            {% for subfield in form.type%}
+            <tr>
+                <td>{{ subfield }}</td>
+                <td>{{ subfield.label }}</td>
+            </tr>
+            {% endfor %}
+            <div class="form-group">
+                {{ form.submit(class="btn btn-outline-info") }}
+            </div>
+            <div class="form-group">
+            {% if user %}
+                Name: {{user.username}} <br>
+                Email: {{user.email}}<br>
+                About: {{user.about}}<br>
+                {% if skillTags.BusinessTag != None %} <span class="badge badge-primary">Business</span>{% endif %}
+                {% if skillTags.LiteratureTag != None %} <span class="badge badge-info">Literature</span>{% endif %}
+                {% if skillTags.TechnologyTag != None %} <span class="badge badge-success">Technology</span>{% endif %}
+                {% if skillTags.ArtTag != None %} <span class="badge badge-warning">Art</span>{% endif %}
+                {% if skillTags.MusicTag != None %} <span class="badge badge-danger">Music</span>{% endif %}
+            {% endif %}
+            </div>
+        </form>
+    </div>
+{% endblock content %}
