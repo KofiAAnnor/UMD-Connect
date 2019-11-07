@@ -46,13 +46,4 @@
         <br>
       </div>
     </div>
-    <br>
-    <a class="btn btn-outline-info" href="{{ url_for('update') }}">Update Profile</a>
-    <br><br>
-    <form action="{{url_for('delete_account')}}" method="POST">
-        <input type="hidden" value={{current_user.email}} name="email"/>
-        <input type="submit" value="Delete Account" class="btn btn-outline-info" onclick="return confirm('Are you sure?');"/>
-    </form>
-
-
 {% endblock content %}
