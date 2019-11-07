@@ -26,7 +26,7 @@
             {% if user %}
                 Name: {{user.username}} <br>
                 Email: {{user.email}}<br>
-                About: {{user.about}}<br>
+                About: {{user.description}}<br>
                 {% if skillTags.BusinessTag != None %} <span class="badge badge-primary">Business</span>{% endif %}
                 {% if skillTags.LiteratureTag != None %} <span class="badge badge-info">Literature</span>{% endif %}
                 {% if skillTags.TechnologyTag != None %} <span class="badge badge-success">Technology</span>{% endif %}

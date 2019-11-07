@@ -4,7 +4,7 @@ from flask_wtf.file import FileField, FileAllowed
 from flaskapp.models import User
 
 from wtforms import StringField, PasswordField, SubmitField, BooleanField
-from wtfforms import TextAreaField,RadioField
+from wtforms import TextAreaField,RadioField
 from wtforms.validators import DataRequired, Length, Email, EqualTo
 from wtforms.validators import ValidationError, Optional
 
@@ -82,7 +82,7 @@ class UpdateForm(FlaskForm):
 
 class SearchForm(FlaskForm):
     name=StringField("Name", validators=[Length(min=2,max=20)])
-    type=RadioField ("Type", choices=[('User','User'),('Project','Project')],validators=[DataRequired()] )
+    type=RadioField ("Type", choices=[('User','User'),('Project','Project')],validators=[DataRequired()] ,default="User")
     skills_bus = BooleanField('Business')
     skills_lit = BooleanField('Literature')
     skills_tech = BooleanField('Technology')
