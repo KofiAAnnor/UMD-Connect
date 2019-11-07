@@ -184,31 +184,27 @@ def search():
     form=SearchForm()
     if form.is_submitted():
         if form.name.data:
-            tags = {
-                    "BusinessTag": Business.query.filter_by(name=form.name.data).first(),
-                    "LiteratureTag": Literature.query.filter_by(name=form.name.data).first(),
-                     "TechnologyTag": Technology.query.filter_by(name=form.name.data).first(),
-                    "ArtTag": Art.query.filter_by(name=form.name.data).first(),
-                    "MusicTag": Music.query.filter_by(name=form.name.data).first(),
-            }
+
             if form.type.data=="User":
                 user=User.query.filter_by(username=form.name.data).first()
                 if form.type.data=="User":
-                    return render_template('search.html', title='Search', form=form,user={user},skillTags=tags)
+                    return render_template('search.html', title='Search', form=form,user={user})
 
             else: #has not edit how porject will display as result
                 project=Project.query.filter_by(user_id=form.name.data).first()
-                return render_template('search.html', title='Search', form=form, user={project},skillTags=tags)
+                return render_template('search.html', title='Search', form=form, user={project})
         elif form.skills_tech.data or form.skills_lit.data or form.skills_art or \
                 form.skills_bus.data or form.skills_music.data:
-            tags={}
             users=[]
             if form.skills_bus.data:
-                b=Business.query.all()
-                tags['BusinessTag']=Business.query.first()
-                for b_user in b:
-                    u=User.query.filter_by(username=b_user.name).first()
-                    users.append(u)
-            return render_template('search.html',title='Search',form=form,user=users,skillTags=tags)
+                u=User.query.filter_by(business=form.skills_bus.data).all()
+                for us in u:
+                    users.append(us)
+            if form.skills_tech.data:
+                u=User.query.filter_by(technology=form.skills_tech.data).all()
+                for us in u:
+                    if us not in users:
+                        users.append(us)
+            return render_template('search.html',title='Search',form=form,user=users)
 
     return render_template('search.html', title='Search', form=form)
