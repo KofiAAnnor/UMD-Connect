@@ -95,4 +95,15 @@ def update():
             return redirect(url_for('profile'))
         else:
             flash('Incorrect. Please check password', 'danger')
+
     return render_template('update.html', title='Update',form=form)
+
+
+@app.route("/project-board")
+def project_board_page():
+    return render_template('project-board.html', title='Project Board')
+
+
+@app.route("/project-detail")
+def project_detail_view():
+    return render_template('project-detail-view.html', title='Project Detail')
