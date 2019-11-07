@@ -14,11 +14,11 @@ class User(db.Model, UserMixin):
     email = db.Column(db.String(120), unique=True, nullable=False)
     image_file = db.Column(db.String(20), nullable=False, default='default.jpg')
     password = db.Column(db.String(60), nullable=False)
-    about=db.Column(db.String(1000),nullable=True)
+    description = db.Column(db.String(1000), nullable=True)
     projects = db.relationship('Project', backref='author', lazy=True)
 
     def __repr__(self):
-        return f"User('{self.username}', '{self.email}', '{self.image_file}')"
+        return f"User('{self.username}', '{self.email}')"
 
 
 class Project(db.Model):
@@ -29,7 +29,7 @@ class Project(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 
     def __repr__(self):
-        return f"Project('{self.title}', '{self.date_posted}', '{self.content}')"
+        return f"Project('{self.title}', '{self.date_posted}', '{self.id}', '{self.user_id}')"
 
 #   THESE TABLES ARE USED TO STORE THE PROJECTS AND USERS THAT CORRESPOND TO A CERTAIN TAG
 #   THE PREDEFINED TAGS ARE Business, Literature, Technology, Art, Music
