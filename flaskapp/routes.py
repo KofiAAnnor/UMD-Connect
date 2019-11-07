@@ -200,8 +200,24 @@ def search():
                 u=User.query.filter_by(business=form.skills_bus.data).all()
                 for us in u:
                     users.append(us)
+
             if form.skills_tech.data:
                 u=User.query.filter_by(technology=form.skills_tech.data).all()
+                for us in u:
+                    if us not in users:
+                        users.append(us)
+            if form.skills_lit.data:
+                u=User.query.filter_by(literature=form.skills_lit.data).all()
+                for us in u:
+                    if us not in users:
+                        users.append(us)
+            if form.skills_art.data:
+                u=User.query.filter_by(art=form.skills_art.data).all()
+                for us in u:
+                    if us not in users:
+                        users.append(us)
+            if form.skills_music.data:
+                u = User.query.filter_by(music=form.skills_music.data).all()
                 for us in u:
                     if us not in users:
                         users.append(us)
