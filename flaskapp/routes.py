@@ -7,6 +7,7 @@ from flask_login import login_user, current_user, logout_user, login_required
 
 @app.route("/")
 @app.route("/home")
+@login_required
 def home():
     return render_template('home.html', title="Home")
 
@@ -41,7 +42,7 @@ def login():
             next_page = request.args.get('next')
             return redirect(next_page) if next_page else redirect(url_for('home'))
         else:
-            flash('Login Unsuccessful. Please check email/password', 'danger')
+            flash('Login Unsuccessful. Please check email/password and try again.', 'danger')
 
     return render_template('login.html', title="Login", form=form)
 
