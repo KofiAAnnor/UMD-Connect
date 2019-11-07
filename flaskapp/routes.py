@@ -85,8 +85,10 @@ def update():
                 user.email=form.new_email.data
             if form.username.data:
                 user.username=form.username.data
-            if form.skills.data:
-                user.skills = form.skills.data
+            if form.skills_bus.data:
+                #user.skills = form.skills.data
+                b=Business(name=user.username,type="user")
+                db.session.add(b)
             if form.new_password.data:
                 hashed_password = bcrypt.generate_password_hash(form.new_password.data).decode('utf-8')
                 user.password = hashed_password
