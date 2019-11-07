@@ -1,6 +1,6 @@
 from flask import render_template, url_for, flash, redirect, request
 from flaskapp import app, db, bcrypt
-from flaskapp.forms import RegistrationForm, LoginForm
+from flaskapp.forms import RegistrationForm, LoginForm, UpdateProfileForm
 from flaskapp.models import User, Project
 from flask_login import login_user, current_user, logout_user, login_required
 
@@ -52,7 +52,24 @@ def logout():
     return redirect(url_for('login'))
 
 
-@app.route("/profile")
+@app.route("/profile", methods=['GET', 'POST'])
 @login_required
 def profile():
-    return render_template('profile.html', title='Profile')
+    form = UpdateProfileForm()
+
+    if form.validate_on_submit():
+        current_user.username = form.username.data
+        current_user.email = form.email.data
+        current_user.skills = form.skills.data
+        current_user.description = form.description.data
+        flash('Your account has been updated', 'success')
+        return redirect(url_for('profile'))
+    elif request.method == 'GET':
+        form.username.data = current_user.username
+        form.email.data = current_user.email
+        form.skills.data = current_user.skills
+        form.description.data = current_user.description 
+
+    image_file = url_for('static', filename='profile_pics/' + current_user.image_file)
+    return render_template('profile.html', title='Profile',
+                            image_file=image_file, form=form)
