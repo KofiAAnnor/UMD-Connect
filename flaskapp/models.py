@@ -15,6 +15,11 @@ class User(db.Model, UserMixin):
     image_file = db.Column(db.String(20), nullable=False, default='default.jpg')
     password = db.Column(db.String(60), nullable=False)
     description = db.Column(db.String(1000), nullable=True)
+    business=db.Column(db.Boolean,default=False)
+    technology=db.Column(db.Boolean,default=False)
+    art=db.Column(db.Boolean,default=False)
+    music=db.Column(db.Boolean,default=False)
+    literature=db.Column(db.Boolean,default=False)
     projects = db.relationship('Project', backref='author', lazy=True)
 
     def __repr__(self):

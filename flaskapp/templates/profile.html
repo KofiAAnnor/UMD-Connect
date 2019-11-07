@@ -26,11 +26,13 @@
             <hr>
             <div>
               <span class="badge badge-dark">SKILLS:</span>
-              {% if skillTags.BusinessTag != None %} <span class="badge badge-primary">Business</span>{% endif %}
-              {% if skillTags.LiteratureTag != None %} <span class="badge badge-info">Literature</span>{% endif %}
-              {% if skillTags.TechnologyTag != None %} <span class="badge badge-success">Technology</span>{% endif %}
-              {% if skillTags.ArtTag != None %} <span class="badge badge-warning">Art</span>{% endif %}
-              {% if skillTags.MusicTag != None %} <span class="badge badge-danger">Music</span>{% endif %}
+
+              {% if current_user.business %} <span class="badge badge-primary">Business</span>{% endif %}
+              {% if current_user.literature %} <span class="badge badge-info">Literature</span>{% endif %}
+              {% if current_user.technology %} <span class="badge badge-success">Technology</span>{% endif %}
+              {% if current_user.art %} <span class="badge badge-warning">Art</span>{% endif %}
+              {% if current_user.music %} <span class="badge badge-danger">Music</span>{% endif %}
+
               <br><br>
               <span class="badge">Description:</span>
               <textarea class="form-control" readonly>{% if current_user.description %}{{ current_user.description }}{% endif %}</textarea>
