@@ -3,7 +3,8 @@ from flask_wtf import FlaskForm
 from flask_wtf.file import FileField, FileAllowed
 from flaskapp.models import User
 from wtforms import StringField, PasswordField, SubmitField, BooleanField
-from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError
+from wtforms.validators import DataRequired, Length, Email, EqualTo
+from wtforms.validators import ValidationError, Optional
 
 
 class RegistrationForm(FlaskForm):
@@ -14,6 +15,7 @@ class RegistrationForm(FlaskForm):
     password = PasswordField('Password', validators=[DataRequired()])
     confirm_password = PasswordField('Confirm Password',
                         validators=[DataRequired(), EqualTo('password')])
+
     submit = SubmitField('Sign Up')
 
     def validate_username(self, username):
@@ -36,11 +38,14 @@ class LoginForm(FlaskForm):
     remember = BooleanField('Remember Me')
     submit = SubmitField('Login')
 
+class UpdateForm(FlaskForm):
     username = StringField('New Username',
                         validators=[Length(min=2,max=20), Optional()])
     new_email = StringField('New Email',
                         validators=[Email(), Optional()])
     description = StringField('Description',
+                        validators=[Length(min=2,max=256), Optional()])
+
     skills_bus = BooleanField('Business')
     skills_lit = BooleanField('Literature')
     skills_tech = BooleanField('Technology')
@@ -48,19 +53,13 @@ class LoginForm(FlaskForm):
     skills_music = BooleanField('Music')
 
     new_password = PasswordField('New Password')
+    confirm_new_password = PasswordField('Confirm New Password',
+                                validators=[EqualTo('new_password')])
+    old_password = PasswordField('Enter Password to Update',
+                                validators=[DataRequired()])
 
-class UpdateProfileForm(FlaskForm):
-    username = StringField('Username',
-                        validators=[DataRequired(), Length(min=2, max=20)])
-    email = StringField('Email', validators=[DataRequired(), Email()])
-    skills = StringField('Skills',validators=[Length(min=2, max=64)])
-    description = StringField('Description',validators=[Length(min=2, max=128)])
     picture = FileField('Update Profile Picture',
-                        validators=[FileAllowed(['jpg', 'png'])])
-    old_password = PasswordField('Old Password', validators=[DataRequired()])
-    new_password = PasswordField('New Password', validators=[DataRequired()])
-    confirm_password = PasswordField('Confirm New Password',
-                        validators=[DataRequired(), EqualTo('new_password')])
+                                validators=[FileAllowed(['jpg', 'jpeg', 'png'])])
 
     submit = SubmitField('Update')
 
@@ -71,9 +70,10 @@ class UpdateProfileForm(FlaskForm):
                 raise ValidationError('That username is taken. \
                                         Please choose a different one.')
 
-    def validate_password(self, old_password):
-        # if old_password != user.password.data:
-        #     raise ValidationError('That email is taken. Please choose a different one.')
+    def validate_new_email(self, email):
+        if email.data != current_user.email:
+            user = User.query.filter_by(email=email.data).first()
+            if user:
                 raise ValidationError('That email is taken. \
                                         Please choose a different one.')
 
