@@ -142,7 +142,9 @@ def project_detail_view():
 @app.route("/search_by_user",methods=['GET','POST'])
 def search_by_user():
     name = request.form['search_name']
-    user = User.query.filter_by(email=name).first()
+    user = User.query.filter_by(username=name).first()
     if not user:
         flash('User does not exist')
-        return redirect(request.referrer)
+    else:
+        flash(user.email)
+    return redirect(request.referrer)
