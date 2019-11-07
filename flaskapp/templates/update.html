@@ -72,35 +72,35 @@
         <label class="form-control-label">Skills</label>
         <br>
         <div class="form-check">
-          {% if bus %}
+          {% if current_user.business %}
             {{ form.skills_bus(checked=True,class="form-check-input") }}
           {% else %}
             {{ form.skills_bus(checked=False,class="form-check-input") }}
           {% endif %}
           {{ form.skills_bus.label(class="form-check-label") }}
           <br>
-          {% if lit %}
+          {% if current_user.literature %}
             {{ form.skills_lit(checked=True,class="form-check-input") }}
           {% else %}
             {{ form.skills_lit(checked=False,class="form-check-input") }}
           {% endif %}
           {{ form.skills_lit.label(class="form-check-label") }}
           <br>
-          {% if tec %}
+          {% if current_user.technology %}
             {{ form.skills_tech(checked=True,class="form-check-input") }}
           {% else %}
             {{ form.skills_tech(checked=False,class="form-check-input") }}
           {% endif %}
           {{ form.skills_tech.label(class="form-check-label") }}
           <br>
-          {% if art %}
+          {% if current_user.art %}
             {{ form.skills_art(checked=True,class="form-check-input") }}
           {% else %}
             {{ form.skills_art(checked=False,class="form-check-input") }}
           {% endif %}
           {{ form.skills_art.label(class="form-check-label") }}
           <br>
-          {% if mu %}
+          {% if current_user.music %}
             {{ form.skills_music(checked=True,class="form-check-input") }}
           {% else %}
             {{ form.skills_music(checked=False,class="form-check-input") }}

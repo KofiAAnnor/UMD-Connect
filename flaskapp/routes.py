@@ -61,15 +61,16 @@ def logout():
 @login_required
 def profile():
     user = User.query.filter_by(email=current_user.email).first()
-    tags = {
+    """tags = {
         "BusinessTag": Business.query.filter_by(name=user.username).first(),
         "LiteratureTag": Literature.query.filter_by(name=user.username).first(),
         "TechnologyTag": Technology.query.filter_by(name=user.username).first(),
         "ArtTag": Art.query.filter_by(name=user.username).first(),
         "MusicTag": Music.query.filter_by(name=user.username).first(),
     }
+    """
     image_file = url_for('static', filename='profile_pics/' + current_user.image_file)
-    return render_template('profile.html', title='Profile', skillTags=tags, image_file=image_file)
+    return render_template('profile.html', title='Profile', image_file=image_file)
 
 
 @app.route("/delete_account", methods=["POST"])
@@ -98,11 +99,11 @@ def save_picture(form_picture):
 @login_required
 def update():
     form = UpdateForm()
-    bus = Business.query.filter_by(name=current_user.username, type="user").first()
-    tec = Technology.query.filter_by(name=current_user.username, type="user").first()
-    lit = Literature.query.filter_by(name=current_user.username, type="user").first()
-    mu = Music.query.filter_by(name=current_user.username, type="user").first()
-    ar = Art.query.filter_by(name=current_user.username, type="user").first()
+    #bus = Business.query.filter_by(name=current_user.username, type="user").first()
+    #tec = Technology.query.filter_by(name=current_user.username, type="user").first()
+    #lit = Literature.query.filter_by(name=current_user.username, type="user").first()
+    #mu = Music.query.filter_by(name=current_user.username, type="user").first()
+    #ar = Art.query.filter_by(name=current_user.username, type="user").first()
 
     if form.validate_on_submit():
         user = User.query.filter_by(email=current_user.email).first()
@@ -116,33 +117,41 @@ def update():
             if form.picture.data:
                 picture_file = save_picture(form.picture.data)
                 current_user.image_file = picture_file
-
-            if form.skills_bus.data and not bus:
-                b = Business(name=user.username, type="user")
-                db.session.add(b)
-            elif not form.skills_bus.data and bus:
-                db.session.delete(bus)
-            if form.skills_lit.data and not lit:
-                b = Literature(name=user.username, type="user")
-                db.session.add(b)
-            elif not form.skills_lit.data and lit:
-                db.session.delete(lit)
-            if form.skills_tech.data and not tec:
-                b = Technology(name=user.username, type="user")
-                db.session.add(b)
-            elif not form.skills_tech.data and tec:
-                db.session.delete(tec)
-            if form.skills_art.data and not ar:
-                b = Art(name=user.username, type="user")
-                db.session.add(b)
-            elif not form.skills_art.data and ar:
-                db.session.delete(ar)
-            if form.skills_music.data and not mu:
-                b = Music(name=user.username, type="user")
-                db.session.add(b)
-            elif not form.skills_music.data and mu:
-                db.session.delete(mu)
-
+            if form.skills_bus.data and not current_user.business:
+                #b = Business(name=user.username, type="user")
+                #db.session.add(b)
+                current_user.business=True
+            elif not form.skills_bus.data and current_user.business:
+                #db.session.delete(bus)
+                current_user.business = False
+            if form.skills_lit.data and not current_user.literature:
+                #b = Literature(name=user.username, type="user")
+                #db.session.add(b)
+                current_user.literature = True
+            elif not form.skills_lit.data and current_user.literature:
+                #db.session.delete(lit)
+                current_user.literature = False
+            if form.skills_tech.data and not current_user.technology:
+                #b = Technology(name=user.username, type="user")
+                #db.session.add(b)
+                current_user.technology=True
+            elif not form.skills_tech.data and current_user.technology:
+                #db.session.delete(tec)
+                current_user.technology=False
+            if form.skills_art.data and not current_user.art:
+                #b = Art(name=user.username, type="user")
+                #db.session.add(b)
+                current_user.art=True
+            elif not form.skills_art.data and current_user.art:
+                #db.session.delete(ar)
+                current_user.art=False
+            if form.skills_music.data and not current_user.music:
+                #b = Music(name=user.username, type="user")
+                #db.session.add(b)
+                current_user.music=True
+            elif not form.skills_music.data and current_user.music:
+                #db.session.delete(mu)
+                current_user.music=False
             if form.new_password.data:
                 hashed_password = bcrypt.generate_password_hash(form.new_password.data).decode('utf-8')
                 user.password = hashed_password
@@ -154,8 +163,7 @@ def update():
             flash('Incorrect. Please check password', 'danger')
 
     image_file = url_for('static', filename='profile_pics/' + current_user.image_file)
-    return render_template('update.html', title='Update', form=form, image_file=image_file,
-                            bus=bus, tec=tec, mu=mu, art=ar, lit=lit)
+    return render_template('update.html', title='Update', form=form, image_file=image_file)
 
 
 @app.route("/project-board")
