@@ -37,8 +37,11 @@ class UpdateForm(FlaskForm):
                            validators=[Length(min=2,max=20),Optional()])
     new_email = StringField('New Email',
                         validators=[Email(),Optional()])
-    skills = StringField('Skills',
-                        validators=[Length(max=500),Optional()])
+    skills_bus = BooleanField('Business')
+    skills_lit = BooleanField('Literature')
+    skills_tech=BooleanField('Technology')
+    skills_art=BooleanField('Art')
+    skills_music=BooleanField('Music')
     new_password = PasswordField('New Password')
     confirm_new_password = PasswordField('Confirm New Password',
                                      validators=[EqualTo('new_password')])
