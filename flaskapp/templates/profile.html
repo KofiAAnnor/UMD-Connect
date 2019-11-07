@@ -6,75 +6,29 @@
           <img class="rounded-circle account-img" src="{{ image_file }}">
           <div class="media-body">
             <h2 class="account-heading">{{ current_user.username }}</h2>
+            <hr>
             <p class="text-secondary">{{ current_user.email }}</p>
+            <span class="badge badge-dark">SKILLS:</span>
+            {% if skillTags.BusinessTag != None %} <span class="badge badge-primary">Business</span>{% endif %}
+            {% if skillTags.LiteratureTag != None %} <span class="badge badge-info">Literature</span>{% endif %}
+            {% if skillTags.TechnologyTag != None %} <span class="badge badge-success">Technology</span>{% endif %}
+            {% if skillTags.ArtTag != None %} <span class="badge badge-warning">Art</span>{% endif %}
+            {% if skillTags.MusicTag != None %} <span class="badge badge-danger">Music</span>{% endif %}
           </div>
         </div>
-
-        <form method="POST" action="">
-            {{ form.hidden_tag() }}
-            <fieldset class="form-group">
-                <legend class="border-bottom mb-4">Account Info</legend>
-                <div class="form-group">
-                    {{ form.username.label(class="form-control-label") }}
-
-                    {% if form.username.errors %}
-                        {{ form.username(class="form-control form-control-lg is-invalid") }}
-                        <div class="invalid-feedback">
-                            {% for error in form.username.errors %}
-                                <span>{{ error }}</span>
-                            {% endfor %}
-                        </div>
-                    {% else %}
-                        {{ form.username(class="form-control form-control-lg") }}
-                    {% endif %}
-                </div>
-                <div class="form-group">
-                    {{ form.email.label(class="form-control-label") }}
-                    {{ form.email(class="form-control form-control-lg") }}
-                </div>
-                <div class="form-group">
-                    {{ form.old_password.label(class="form-control-label") }}
-                    {% if form.old_password.errors %}
-                        {{ form.old_password(class="form-control form-control-lg is-invalid") }}
-                        <div class="invalid-feedback">
-                            {% for error in form.old_password.errors %}
-                                <span>{{ error }}</span>
-                            {% endfor %}
-                        </div>
-                    {% else %}
-                        {{ form.old_password(class="form-control form-control-lg") }}
-                    {% endif %}
-                </div>
-                <div class="form-group">
-                    {{ form.new_password.label(class="form-control-label") }}
-                    {% if form.new_password.errors %}
-                        {{ form.new_password(class="form-control form-control-lg is-invalid") }}
-                        <div class="invalid-feedback">
-                            {% for error in form.new_password.errors %}
-                                <span>{{ error }}</span>
-                            {% endfor %}
-                        </div>
-                    {% else %}
-                        {{ form.new_password(class="form-control form-control-lg") }}
-                    {% endif %}
-                </div>                <div class="form-group">
-                    {{ form.confirm_password.label(class="form-control-label") }}
-                    {% if form.confirm_password.errors %}
-                        {{ form.confirm_password(class="form-control form-control-lg is-invalid") }}
-                        <div class="invalid-feedback">
-                            {% for error in form.confirm_password.errors %}
-                                <span>{{ error }}</span>
-                            {% endfor %}
-                        </div>
-                    {% else %}
-                        {{ form.confirm_password(class="form-control form-control-lg") }}
-                    {% endif %}
-                </div>
-            </fieldset>
-            <div class="form-group">
-                {{ form.submit(class="btn btn-outline-info") }}
-            </div>
-        </form>
+        <br>
+        <div class="row">
+          <div class="col">
+            <a class="btn btn-outline-info" href="{{ url_for('update') }}">Update Profile</a>
+          </div>
+          <div class="col">
+            <form action="{{url_for('delete_account')}}" method="POST">
+              <input type="hidden" value={{current_user.email}} name="email"/>
+              <input type="submit" value="Delete Account" class="btn btn-outline-danger" onclick="return confirm('Are you sure?');"/>
+            </form>
+          </div>
+          <div class="col"></div><div class="col"></div>
+        </div>
       </div>
     </div>
 {% endblock content %}
