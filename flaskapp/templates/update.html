@@ -32,6 +32,10 @@
                         {{ form.new_email(class="form-control form-control-lg",placeholder=current_user.email) }}
                     {% endif %}
                 </div>
+                <div class="form-group">
+                    {{form.about.label(class="form-control-label")}}
+                    {{form.about(class="form-control form-control=lg",placeholder=current_user.about)}}
+                </div>
                 Skills <br>
                 <div class="form-check">
                     {% if bus %}

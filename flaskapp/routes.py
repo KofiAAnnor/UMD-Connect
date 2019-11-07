@@ -92,6 +92,8 @@ def update():
                 user.email = form.new_email.data
             if form.username.data:
                 user.username = form.username.data
+            if form.about.data:
+                user.about=form.about.data
             if form.skills_bus.data and not bus:
                 b = Business(name=user.username, type="user")
                 db.session.add(b)
@@ -136,3 +138,11 @@ def project_board_page():
 @app.route("/project-detail")
 def project_detail_view():
     return render_template('project-detail-view.html', title='Project Detail')
+
+@app.route("/search_by_user",methods=['GET','POST'])
+def search_by_user():
+    name = request.form['search_name']
+    user = User.query.filter_by(email=name).first()
+    if not user:
+        flash('User does not exist')
+        return redirect(request.referrer)

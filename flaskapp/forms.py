@@ -37,6 +37,7 @@ class UpdateForm(FlaskForm):
                            validators=[Length(min=2,max=20),Optional()])
     new_email = StringField('New Email',
                         validators=[Email(),Optional()])
+    about = StringField('About Me',validators=[Optional()])
     skills_bus = BooleanField('Business')
     skills_lit = BooleanField('Literature')
     skills_tech=BooleanField('Technology')
@@ -57,3 +58,4 @@ class UpdateForm(FlaskForm):
         user = User.query.filter_by(email=new_email.data).first()
         if user:
             raise ValidationError('That email is taken. Please choose a different one.')
+

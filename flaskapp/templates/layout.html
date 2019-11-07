@@ -30,6 +30,10 @@
             <!-- Navbar Right Side -->
             <div class="navbar-nav">
               {% if current_user.is_authenticated %}
+              <form action="{{ url_for('search_by_user') }}" method="POST">
+                <input type="text" name="search_name" placeholder="search user"/>
+                <input type="submit" name="search_button" value ="search"class = "btn btn-outline-info"/>
+              </form>
                 <a class="nav-item nav-link" href="{{ url_for('profile') }}">My Profile</a>
                 <a class="nav-item nav-link" href="{{ url_for('logout') }}">Logout</a>
               {% else %}
