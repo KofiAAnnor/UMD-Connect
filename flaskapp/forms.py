@@ -36,6 +36,18 @@ class LoginForm(FlaskForm):
     remember = BooleanField('Remember Me')
     submit = SubmitField('Login')
 
+    username = StringField('New Username',
+                        validators=[Length(min=2,max=20), Optional()])
+    new_email = StringField('New Email',
+                        validators=[Email(), Optional()])
+    description = StringField('Description',
+    skills_bus = BooleanField('Business')
+    skills_lit = BooleanField('Literature')
+    skills_tech = BooleanField('Technology')
+    skills_art = BooleanField('Art')
+    skills_music = BooleanField('Music')
+
+    new_password = PasswordField('New Password')
 
 class UpdateProfileForm(FlaskForm):
     username = StringField('Username',
@@ -60,6 +72,12 @@ class UpdateProfileForm(FlaskForm):
                                         Please choose a different one.')
 
     def validate_password(self, old_password):
-        user = User.query.filter_by(email=email.data).first()
         # if old_password != user.password.data:
         #     raise ValidationError('That email is taken. Please choose a different one.')
+                raise ValidationError('That email is taken. \
+                                        Please choose a different one.')
+
+    def validate_password(self, password):
+        # TODO: authenticate password before updating
+        if False:
+            raise ValidationError('Incorrect password.')
