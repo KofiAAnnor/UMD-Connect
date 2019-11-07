@@ -38,28 +38,45 @@ class LoginForm(FlaskForm):
     remember = BooleanField('Remember Me')
     submit = SubmitField('Login')
 
+
 class UpdateForm(FlaskForm):
     username = StringField('New Username',
-                           validators=[Length(min=2,max=20),Optional()])
-    new_email = StringField('New Email',
-                        validators=[Email(),Optional()])
+                        validators=[Length(min=2,max=20), Optional()])
+    email = StringField('New Email',
+                        validators=[Email(), Optional()])
+    description = StringField('Description',
+                        validators=[Length(min=2,max=256), Optional()])
+    picture = FileField('Update Profile Picture',
+                        validators=[FileAllowed(['jpg', 'jpeg', 'png'])])
     skills_bus = BooleanField('Business')
     skills_lit = BooleanField('Literature')
-    skills_tech=BooleanField('Technology')
-    skills_art=BooleanField('Art')
-    skills_music=BooleanField('Music')
+    skills_tech = BooleanField('Technology')
+    skills_art = BooleanField('Art')
+    skills_music = BooleanField('Music')
+
     new_password = PasswordField('New Password')
     confirm_new_password = PasswordField('Confirm New Password',
-                                     validators=[EqualTo('new_password')])
-    old_password = PasswordField('Enter Password to Update',validators=[DataRequired()])
+                                        validators=[EqualTo('new_password')])
+    old_password = PasswordField('Enter Password to Update',
+                                        validators=[DataRequired()])
+
     submit = SubmitField('Update')
 
     def validate_username(self, username):
-        user = User.query.filter_by(username=username.data).first()
-        if user:
-            raise ValidationError('That username is taken. Please choose a different one.')
+        if username.data != current_user.username:
+            user = User.query.filter_by(username=username.data).first()
+            if user:
+                raise ValidationError('That username is taken. \
+                                        Please choose a different one.')
 
-    def validate_new_email(self, new_email):
-        user = User.query.filter_by(email=new_email.data).first()
-        if user:
-            raise ValidationError('That email is taken. Please choose a different one.')
+    def validate_new_email(self, email):
+        if email.data != current_user.email:
+            user = User.query.filter_by(email=email.data).first()
+            if user:
+                raise ValidationError('That email is taken. \
+                                        Please choose a different one.')
+
+    def validate_password(self, password):
+        # TODO: authenticate password before updating
+        if False:
+            raise ValidationError('Incorrect password.')
