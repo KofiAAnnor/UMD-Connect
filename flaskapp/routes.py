@@ -85,8 +85,10 @@ def update():
                 user.email=form.new_email.data
             if form.username.data:
                 user.username=form.username.data
-            if form.skills.data:
-                user.skills = form.skills.data
+            if form.skills_bus.data:
+                #user.skills = form.skills.data
+                b=Business(name=user.username,type="user")
+                db.session.add(b)
             if form.new_password.data:
                 hashed_password = bcrypt.generate_password_hash(form.new_password.data).decode('utf-8')
                 user.password = hashed_password
@@ -96,3 +98,14 @@ def update():
         else:
             flash('Incorrect. Please check password', 'danger')
     return render_template('update.html', title='Update',form=form)
+
+
+@app.route("/project-board")
+def project_board_page():
+    return render_template('project-board.html', title='Project Board')
+
+
+@app.route("/project-detail")
+def project_detail_view():
+    return render_template('project-detail-view.html', title='Project Detail')
+
