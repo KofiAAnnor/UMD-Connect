@@ -1,8 +1,11 @@
+import os
+import secrets
 from flask import render_template, url_for, flash, redirect, request
 from flaskapp import app, db, bcrypt
 from flaskapp.forms import RegistrationForm, LoginForm, UpdateForm
 from flaskapp.models import User, Project, Business, Technology, Literature, Art, Music
 from flask_login import login_user, current_user, logout_user, login_required
+from PIL import Image
 
 
 @app.route("/")
@@ -65,7 +68,8 @@ def profile():
         "ArtTag": Art.query.filter_by(name=user.username).first(),
         "MusicTag": Music.query.filter_by(name=user.username).first(),
     }
-    return render_template('profile.html', title='Profile', skillTags=tags)
+    image_file = url_for('static', filename='profile_pics/' + current_user.image_file)
+    return render_template('profile.html', title='Profile', skillTags=tags, image_file=image_file)
 
 
 @app.route("/delete_account", methods=["POST"])
@@ -77,6 +81,19 @@ def delete_account():
     return logout()
 
 
+def save_picture(form_picture):
+    random_hex = secrets.token_hex(8)
+    _, f_ext = os.path.splitext(form_picture.filename)
+    picture_fn = random_hex + f_ext
+    picture_path = os.path.join(app.root_path, 'static/profile_pics', picture_fn)
+
+    output_size = (250, 250)
+    i = Image.open(form_picture)
+    i.thumbnail(output_size)
+    i.save(picture_path)
+
+    return picture_fn
+
 @app.route("/update", methods=["POST", 'GET'])
 @login_required
 def update():
@@ -86,6 +103,7 @@ def update():
     lit = Literature.query.filter_by(name=current_user.username, type="user").first()
     mu = Music.query.filter_by(name=current_user.username, type="user").first()
     ar = Art.query.filter_by(name=current_user.username, type="user").first()
+
     if form.validate_on_submit():
         user = User.query.filter_by(email=current_user.email).first()
         if bcrypt.check_password_hash(user.password, form.old_password.data):
@@ -93,6 +111,12 @@ def update():
                 user.email = form.new_email.data
             if form.username.data:
                 user.username = form.username.data
+            if form.description.data:
+                user.description = form.description.data
+            if form.picture.data:
+                picture_file = save_picture(form.picture.data)
+                current_user.image_file = picture_file
+
             if form.skills_bus.data and not bus:
                 b = Business(name=user.username, type="user")
                 db.session.add(b)
@@ -118,15 +142,20 @@ def update():
                 db.session.add(b)
             elif not form.skills_music.data and mu:
                 db.session.delete(mu)
+
             if form.new_password.data:
                 hashed_password = bcrypt.generate_password_hash(form.new_password.data).decode('utf-8')
                 user.password = hashed_password
+
             db.session.commit()
             flash(f'Your account has been updated.', 'success')
             return redirect(url_for('profile'))
         else:
             flash('Incorrect. Please check password', 'danger')
-    return render_template('update.html', title='Update', form=form, bus=bus, tec=tec, mu=mu, art=ar, lit=lit)
+
+    image_file = url_for('static', filename='profile_pics/' + current_user.image_file)
+    return render_template('update.html', title='Update', form=form, image_file=image_file,
+                            bus=bus, tec=tec, mu=mu, art=ar, lit=lit)
 
 
 @app.route("/project-board")
