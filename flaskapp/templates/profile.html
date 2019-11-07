@@ -3,5 +3,22 @@
     <div class="container">
       <h1>{{ current_user.username }}</h1>
       <hr>
+        Email: {{current_user.email}} <br>
+        <span class="badge badge-dark">SKILLS:</span>
+        {% if skillTags.BusinessTag != None %} <span class="badge badge-primary">Business</span>{% endif %}
+        {% if skillTags.LiteratureTag != None %} <span class="badge badge-info">Literature</span>{% endif %}
+        {% if skillTags.TechnologyTag != None %} <span class="badge badge-success">Technology</span>{% endif %}
+        {% if skillTags.ArtTag != None %} <span class="badge badge-warning">Art</span>{% endif %}
+        {% if skillTags.MusicTag != None %} <span class="badge badge-danger">Music</span>{% endif %}
+
     </div>
+    <br>
+    <a class="btn btn-outline-info" href="{{ url_for('update') }}">Update Profile</a>
+    <br><br>
+    <form action="{{url_for('delete_account')}}" method="POST">
+        <input type="hidden" value={{current_user.email}} name="email"/>
+        <input type="submit" value="Delete Account" class="btn btn-outline-info" onclick="return confirm('Are you sure?');"/>
+    </form>
+
+
 {% endblock content %}
