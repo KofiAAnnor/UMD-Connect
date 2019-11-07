@@ -3,6 +3,7 @@ from flask_wtf import FlaskForm
 from flask_wtf.file import FileField, FileAllowed
 from flaskapp.models import User
 from wtforms import StringField, PasswordField, SubmitField, BooleanField
+from wtforms import TextAreaField
 from wtforms.validators import DataRequired, Length, Email, EqualTo
 from wtforms.validators import ValidationError, Optional
 
@@ -42,10 +43,10 @@ class LoginForm(FlaskForm):
 class UpdateForm(FlaskForm):
     username = StringField('New Username',
                         validators=[Length(min=2,max=20), Optional()])
-    email = StringField('New Email',
+    new_email = StringField('New Email',
                         validators=[Email(), Optional()])
-    description = StringField('Description',
-                        validators=[Length(min=2,max=256), Optional()])
+    description = TextAreaField('Description',
+                        validators=[Length(max=256), Optional()])
     picture = FileField('Update Profile Picture',
                         validators=[FileAllowed(['jpg', 'jpeg', 'png'])])
     skills_bus = BooleanField('Business')
@@ -77,6 +78,6 @@ class UpdateForm(FlaskForm):
                                         Please choose a different one.')
 
     def validate_password(self, password):
-        # TODO: authenticate password before updating
+        # TODO: authenticate hashed password before updating
         if False:
             raise ValidationError('Incorrect password.')

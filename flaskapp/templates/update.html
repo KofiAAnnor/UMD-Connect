@@ -37,13 +37,19 @@
         </div>
 
         <div class="form-group">
-          <label class="form-control-label" for="description">Description</label>
-          <textarea class="form-control" id="description" rows="3">
-            {% if current_user.description %}
-              {{ current_user.description }}
-            {% endif %}
-          </textarea>
-
+          {{ form.description.label(class="form-control-label") }}
+          {% if form.description.errors %}
+            {{ form.description(class="form-control form-control-lg is-invalid") }}
+              <div class="invalid-feedback">
+                {% for error in form.description.errors %}
+                  <span>{{ error }}</span>
+                {% endfor %}
+              </div>
+          {% else %}
+            {{ form.description(class="form-control form-control-lg",placeholder=current_user.description) }}
+          {% endif %}
+          <!-- <label class="form-control-label" for="description">Description</label> -->
+          <!-- <textarea class="form-control" id="description" rows="3">{% if current_user.description %}{{ current_user.description }}{% endif %}</textarea> -->
         </div>
 
 

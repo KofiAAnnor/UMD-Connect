@@ -95,6 +95,9 @@ def update():
                 user.email = form.new_email.data
             if form.username.data:
                 user.username = form.username.data
+            if form.description.data:
+                user.description = form.description.data
+
             if form.skills_bus.data and not bus:
                 b = Business(name=user.username, type="user")
                 db.session.add(b)
@@ -120,6 +123,7 @@ def update():
                 db.session.add(b)
             elif not form.skills_music.data and mu:
                 db.session.delete(mu)
+
             if form.new_password.data:
                 hashed_password = bcrypt.generate_password_hash(form.new_password.data).decode('utf-8')
                 user.password = hashed_password

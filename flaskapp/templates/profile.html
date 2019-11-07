@@ -33,11 +33,7 @@
 
               <br><br>
               <span class="badge">Description:</span>
-              <textarea class="form-control" readonly>
-                {% if current_user.description %}
-                  {{ current_user.description }}
-                {% endif %}
-              </textarea>
+              <textarea class="form-control" readonly>{% if current_user.description %}{{ current_user.description }}{% endif %}</textarea>
             </div>
 
           </div>
