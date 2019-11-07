@@ -47,7 +47,7 @@ class UpdateForm(FlaskForm):
                         validators=[Email(), Optional()])
     description = TextAreaField('Description',
                         validators=[Length(max=256), Optional()])
-    picture = FileField('Update Profile Picture',
+    picture = FileField('Profile Picture',
                         validators=[FileAllowed(['jpg', 'jpeg', 'png'])])
     skills_bus = BooleanField('Business')
     skills_lit = BooleanField('Literature')

@@ -1,8 +1,11 @@
+import os
+import secrets
 from flask import render_template, url_for, flash, redirect, request
 from flaskapp import app, db, bcrypt
 from flaskapp.forms import RegistrationForm, LoginForm, UpdateForm
 from flaskapp.models import User, Project, Business, Technology, Literature, Art, Music
 from flask_login import login_user, current_user, logout_user, login_required
+from PIL import Image
 
 
 @app.route("/")
@@ -78,6 +81,19 @@ def delete_account():
     return logout()
 
 
+def save_picture(form_picture):
+    random_hex = secrets.token_hex(8)
+    _, f_ext = os.path.splitext(form_picture.filename)
+    picture_fn = random_hex + f_ext
+    picture_path = os.path.join(app.root_path, 'static/profile_pics', picture_fn)
+
+    output_size = (250, 250)
+    i = Image.open(form_picture)
+    i.thumbnail(output_size)
+    i.save(picture_path)
+
+    return picture_fn
+
 @app.route("/update", methods=["POST", 'GET'])
 @login_required
 def update():
@@ -97,6 +113,9 @@ def update():
                 user.username = form.username.data
             if form.description.data:
                 user.description = form.description.data
+            if form.picture.data:
+                picture_file = save_picture(form.picture.data)
+                current_user.image_file = picture_file
 
             if form.skills_bus.data and not bus:
                 b = Business(name=user.username, type="user")
@@ -133,7 +152,10 @@ def update():
             return redirect(url_for('profile'))
         else:
             flash('Incorrect. Please check password', 'danger')
-    return render_template('update.html', title='Update', form=form, bus=bus, tec=tec, mu=mu, art=ar, lit=lit)
+
+    image_file = url_for('static', filename='profile_pics/' + current_user.image_file)
+    return render_template('update.html', title='Update', form=form, image_file=image_file,
+                            bus=bus, tec=tec, mu=mu, art=ar, lit=lit)
 
 
 @app.route("/project-board")
