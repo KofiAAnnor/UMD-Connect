@@ -1,6 +1,7 @@
 {% extends "layout.html" %}
 {% block content %}
     <div class="container">
+
       <div class="content-section">
         <div class="media">
           <img class="rounded-circle account-img mt-3" src="{{ image_file }}">
@@ -30,7 +31,6 @@
               {% if skillTags.TechnologyTag != None %} <span class="badge badge-success">Technology</span>{% endif %}
               {% if skillTags.ArtTag != None %} <span class="badge badge-warning">Art</span>{% endif %}
               {% if skillTags.MusicTag != None %} <span class="badge badge-danger">Music</span>{% endif %}
-
               <br><br>
               <span class="badge">Description:</span>
               <textarea class="form-control" readonly>{% if current_user.description %}{{ current_user.description }}{% endif %}</textarea>

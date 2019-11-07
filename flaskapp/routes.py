@@ -2,7 +2,7 @@ import os
 import secrets
 from flask import render_template, url_for, flash, redirect, request
 from flaskapp import app, db, bcrypt
-from flaskapp.forms import RegistrationForm, LoginForm, UpdateForm
+from flaskapp.forms import RegistrationForm, LoginForm, UpdateForm,SearchForm
 from flaskapp.models import User, Project, Business, Technology, Literature, Art, Music
 from flask_login import login_user, current_user, logout_user, login_required
 from PIL import Image
@@ -116,7 +116,6 @@ def update():
             if form.picture.data:
                 picture_file = save_picture(form.picture.data)
                 current_user.image_file = picture_file
-
             if form.skills_bus.data and not bus:
                 b = Business(name=user.username, type="user")
                 db.session.add(b)
@@ -166,3 +165,22 @@ def project_board_page():
 @app.route("/project-detail")
 def project_detail_view():
     return render_template('project-detail-view.html', title='Project Detail')
+
+@app.route("/search", methods=["POST", 'GET'])
+def search():
+    # todo - when username no input, search by skills, list all user with those skills
+    # todo - display their project also
+    form=SearchForm()
+    user=User.query.filter_by(username=form.name.data).first()
+    project=Project.query.filter_by(user_id=form.name.data).first()
+    tags = {
+        "BusinessTag": Business.query.filter_by(name=form.name.data).first(),
+        "LiteratureTag": Literature.query.filter_by(name=form.name.data).first(),
+         "TechnologyTag": Technology.query.filter_by(name=form.name.data).first(),
+        "ArtTag": Art.query.filter_by(name=form.name.data).first(),
+        "MusicTag": Music.query.filter_by(name=form.name.data).first(),
+    }
+    if form.type.data=="User":
+        return render_template('search.html', title='Search', form=form,user=user,skillTags=tags)
+    else:
+        return render_template('search.html', title='Search', form=form, user=project,skillTags=tags)
