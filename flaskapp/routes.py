@@ -1,6 +1,6 @@
 from flask import render_template, url_for, flash, redirect, request
 from flaskapp import app, db, bcrypt
-from flaskapp.forms import RegistrationForm, LoginForm,UpdateForm
+from flaskapp.forms import RegistrationForm, LoginForm, UpdateForm
 from flaskapp.models import User, Project, Business, Technology, Literature, Art, Music
 from flask_login import login_user, current_user, logout_user, login_required
 
@@ -27,6 +27,7 @@ def register():
         return redirect(url_for('login'))
 
     return render_template('register.html', title="Register", form=form)
+
 
 @app.route("/login", methods=['GET', 'POST'])
 def login():
@@ -59,36 +60,63 @@ def profile():
     tags = {
         "BusinessTag": Business.query.filter_by(name=user.username).first(),
         "LiteratureTag": Literature.query.filter_by(name=user.username).first(),
-        "TechnologyTag":  Technology.query.filter_by(name=user.username).first(),
-        "ArtTag":  Art.query.filter_by(name=user.username).first(),
-        "MusicTag":  Music.query.filter_by(name=user.username).first(),
+        "TechnologyTag": Technology.query.filter_by(name=user.username).first(),
+        "ArtTag": Art.query.filter_by(name=user.username).first(),
+        "MusicTag": Music.query.filter_by(name=user.username).first(),
     }
     return render_template('profile.html', title='Profile', skillTags=tags)
 
 
-@app.route("/delete_account",methods=["POST"])
+@app.route("/delete_account", methods=["POST"])
 @login_required
 def delete_account():
-    user=User.query.filter_by(email=request.form['email']).first()
+    user = User.query.filter_by(email=request.form['email']).first()
     db.session.delete(user)
     db.session.commit()
     return logout()
 
-@app.route("/update",methods=["POST",'GET'])
+
+@app.route("/update", methods=["POST", 'GET'])
 @login_required
 def update():
-    form=UpdateForm()
+    form = UpdateForm()
+    bus = Business.query.filter_by(name=current_user.username, type="user").first()
+    tec = Technology.query.filter_by(name=current_user.username, type="user").first()
+    lit = Literature.query.filter_by(name=current_user.username, type="user").first()
+    mu = Music.query.filter_by(name=current_user.username, type="user").first()
+    ar = Art.query.filter_by(name=current_user.username, type="user").first()
     if form.validate_on_submit():
         user = User.query.filter_by(email=current_user.email).first()
         if bcrypt.check_password_hash(user.password, form.old_password.data):
-            if form.new_email.data :
-                user.email=form.new_email.data
+            if form.new_email.data:
+                user.email = form.new_email.data
             if form.username.data:
-                user.username=form.username.data
-            if form.skills_bus.data:
-                #user.skills = form.skills.data
-                b=Business(name=user.username,type="user")
+                user.username = form.username.data
+            if form.skills_bus.data and not bus:
+                b = Business(name=user.username, type="user")
                 db.session.add(b)
+            elif not form.skills_bus.data and bus:
+                db.session.delete(bus)
+            if form.skills_lit.data and not lit:
+                b = Literature(name=user.username, type="user")
+                db.session.add(b)
+            elif not form.skills_lit.data and lit:
+                db.session.delete(lit)
+            if form.skills_tech.data and not tec:
+                b = Technology(name=user.username, type="user")
+                db.session.add(b)
+            elif not form.skills_tech.data and tec:
+                db.session.delete(tec)
+            if form.skills_art.data and not ar:
+                b = Art(name=user.username, type="user")
+                db.session.add(b)
+            elif not form.skills_art.data and ar:
+                db.session.delete(ar)
+            if form.skills_music.data and not mu:
+                b = Music(name=user.username, type="user")
+                db.session.add(b)
+            elif not form.skills_music.data and mu:
+                db.session.delete(mu)
             if form.new_password.data:
                 hashed_password = bcrypt.generate_password_hash(form.new_password.data).decode('utf-8')
                 user.password = hashed_password
@@ -97,7 +125,7 @@ def update():
             return redirect(url_for('profile'))
         else:
             flash('Incorrect. Please check password', 'danger')
-    return render_template('update.html', title='Update',form=form)
+    return render_template('update.html', title='Update', form=form, bus=bus, tec=tec, mu=mu, art=ar, lit=lit)
 
 
 @app.route("/project-board")
@@ -108,4 +136,3 @@ def project_board_page():
 @app.route("/project-detail")
 def project_detail_view():
     return render_template('project-detail-view.html', title='Project Detail')
-

@@ -34,17 +34,37 @@
                 </div>
                 Skills <br>
                 <div class="form-check">
-                    {{ form.skills_bus(class="form-check-input") }}
+                    {% if bus %}
+                    {{ form.skills_bus(checked=True,class="form-check-input") }}
+                    {% else %}
+                    {{ form.skills_bus(checked=False,class="form-check-input") }}
+                    {% endif %}
                     {{ form.skills_bus.label(class="form-check-label") }}<br>
-                    {{ form.skills_lit(class="form-check-input") }}
+                    {% if lit %}
+                    {{ form.skills_lit(checked=True,class="form-check-input") }}
+                    {% else %}
+                    {{ form.skills_lit(checked=False,class="form-check-input") }}
+                    {% endif %}
                     {{ form.skills_lit.label(class="form-check-label") }}<br>
-                    {{ form.skills_tech(class="form-check-input") }}
+                    {% if tec %}
+                    {{ form.skills_tech(checked=True,class="form-check-input") }}
+                    {% else %}
+                    {{ form.skills_tech(checked=False,class="form-check-input") }}
+                    {% endif %}
                     {{ form.skills_tech.label(class="form-check-label") }}<br>
-                    {{ form.skills_art(class="form-check-input") }}
+                    {% if art %}
+                    {{ form.skills_art(checked=True,class="form-check-input") }}
+                    {% else %}
+                    {{ form.skills_art(checked=False,class="form-check-input") }}
+                    {% endif %}
                     {{ form.skills_art.label(class="form-check-label") }}<br>
-                    {{ form.skills_music(class="form-check-input") }}
-                    {{ form.skills_music.label(class="form-check-label") }}
-                </div>
+                    {% if mu %}
+                    {{ form.skills_music(checked=True,class="form-check-input") }}
+                    {% else %}
+                    {{ form.skills_music(checked=False,class="form-check-input") }}
+                    {% endif %}
+                    {{ form.skills_music.label(class="form-check-label") }}<br>
+                 </div>
                 <div class="form-group">
                     {{ form.new_password.label(class="form-control-label") }}
                     {% if form.new_password.errors %}

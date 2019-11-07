@@ -22,6 +22,6 @@ from flaskapp.models import User
 db.drop_all()
 db.create_all()
 
-admin = User(username='admin', email='admin@admin.com', password="admin")
+admin = User(username='admin', email='admin@admin.com', password=bcrypt.generate_password_hash("admin").decode('utf-8'))
 db.session.add(admin)
 db.session.commit()
