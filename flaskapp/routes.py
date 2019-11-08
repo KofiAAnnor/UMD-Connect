@@ -1,4 +1,4 @@
-from flask import render_template, url_for, flash, redirect, request
+from flask import render_template, url_for, flash, redirect, request, abort
 from flaskapp import app, db, bcrypt
 from flaskapp.forms import RegistrationForm, LoginForm, UpdateForm, NewProjectForm
 from flaskapp.models import User, Project, Business, Technology, Literature, Art, Music
@@ -143,11 +143,6 @@ def project_board_page():
     return render_template('project-board.html', title='Project Board')
 
 
-@app.route("/project-detail")
-def project_detail_view():
-    return render_template('project-detail-view.html', title='Project Detail')
-
-
 @app.route("/project/new", methods=['GET', 'POST'])
 @login_required
 def new_project():
@@ -157,5 +152,47 @@ def new_project():
         db.session.add(project)
         db.session.commit()
         flash('Your project has been created!', 'success')
-        return redirect(url_for('home'))
-    return render_template('new_project.html', title='New Project', form=form)
+        return redirect(url_for('project_detail_view', project_id=project.id))
+
+    return render_template('project.html', title='New Project', form=form,
+                                legend='New Project')
+
+
+@app.route("/project/<int:project_id>")
+@login_required
+def project_detail_view(project_id):
+    project = Project.query.get_or_404(project_id)
+    return render_template('project-detail-view.html', title='Project Detail', project=project)
+
+
+@app.route("/project/<int:project_id>/update", methods=['GET', 'POST'])
+@login_required
+def update_project(project_id):
+    project = Project.query.get_or_404(project_id)
+    if project.author != current_user:
+        abort(403)
+    form = NewProjectForm()
+    if form.validate_on_submit():
+        project.title = form.title.data
+        project.description = form.description.data
+        db.session.commit()
+        flash('Your project has been updated!', 'success')
+        return redirect(url_for('project_detail_view', project_id=project.id))
+    elif request.method == 'GET':
+        form.title.data = project.title
+        form.description.data = project.description
+
+    return render_template('project.html', title='Update Project', form=form,
+                            legend='Update Project')
+
+
+@app.route("/project/<int:project_id>/delete", methods=['POST'])
+@login_required
+def delete_project(project_id):
+    project = Project.query.get_or_404(project_id)
+    if project.author != current_user:
+        abort(403)
+    db.session.delete(project)
+    db.session.commit()
+    flash('Project '+ project.title +' has been deleted!', 'success')
+    return redirect(url_for('home'))

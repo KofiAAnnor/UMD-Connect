@@ -84,7 +84,7 @@ class UpdateForm(FlaskForm):
 
 
 class NewProjectForm(FlaskForm):
-    title = StringField('Title', validators=[DataRequired()])
+    title = StringField('Title', validators=[DataRequired(), Length(min=2, max=32)])
     description = TextAreaField('Description',
-                                validators=[Length(max=512), Optional()])
+                                validators=[Length(min=2, max=512), Optional()])
     submit = SubmitField('Post')

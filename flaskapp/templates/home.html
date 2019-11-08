@@ -7,7 +7,7 @@
 
       {% if your_projects %}
         {% for project in your_projects %}
-          <article class="media content-section col-lg-4">
+          <article class="media content-section col-lg-6">
             <img class="rounded-circle article-img"
               src="{{ url_for('static', filename='profile_pics/' + project.author.image_file) }}"
               alt="'static', filename='profile_pics/default.jpg') ">
@@ -16,7 +16,7 @@
                 <a class="mr-2" href="#">{{ project.author.username }}</a>
                 <small class="text-muted">{{ project.date_posted.strftime("%m/%d/%Y, %I:%M%p") }}</small>
               </div>
-              <h4><a class="article-title" href="#">{{ project.title }}</a></h4>
+              <h4><a class="article-title" href="{{ url_for('project_detail_view', project_id=project.id) }}">{{ project.title }}</a></h4>
               <p class="article-content">{{ project.description }}</p>
             </div>
           </article>
@@ -44,7 +44,7 @@
                 <a class="mr-2" href="#">{{ project.author.username }}</a>
                 <small class="text-muted">{{ project.date_posted.strftime("%m/%d/%Y, %I:%M%p") }}</small>
               </div>
-              <h4><a class="article-title" href="#">{{ project.title }}</a></h4>
+              <h4><a class="article-title" href="{{ url_for('project_detail_view', project_id=project.id) }}">{{ project.title }}</a></h4>
               <p class="article-content">{{ project.description }}</p>
             </div>
           </article>
