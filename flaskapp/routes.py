@@ -1,6 +1,6 @@
 from flask import render_template, url_for, flash, redirect, request
 from flaskapp import app, db, bcrypt
-from flaskapp.forms import RegistrationForm, LoginForm, UpdateForm
+from flaskapp.forms import RegistrationForm, LoginForm, UpdateForm, NewProjectForm
 from flaskapp.models import User, Project, Business, Technology, Literature, Art, Music
 from flask_login import login_user, current_user, logout_user, login_required
 
@@ -9,7 +9,9 @@ from flask_login import login_user, current_user, logout_user, login_required
 @app.route("/home")
 @login_required
 def home():
-    return render_template('home.html', title="Home")
+    projects = Project.query.filter(Project.user_id != current_user.id).all()
+    your_projects = Project.query.filter_by(user_id=current_user.id).all()
+    return render_template('home.html', title="Home", projects=projects, your_projects=your_projects)
 
 
 @app.route("/register", methods=['GET', 'POST'])
@@ -144,3 +146,16 @@ def project_board_page():
 @app.route("/project-detail")
 def project_detail_view():
     return render_template('project-detail-view.html', title='Project Detail')
+
+
+@app.route("/project/new", methods=['GET', 'POST'])
+@login_required
+def new_project():
+    form = NewProjectForm()
+    if form.validate_on_submit():
+        project = Project(title=form.title.data, description=form.description.data, author=current_user)
+        db.session.add(project)
+        db.session.commit()
+        flash('Your project has been created!', 'success')
+        return redirect(url_for('home'))
+    return render_template('new_project.html', title='New Project', form=form)

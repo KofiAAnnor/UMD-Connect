@@ -81,3 +81,10 @@ class UpdateForm(FlaskForm):
         # TODO: authenticate hashed password before updating
         if False:
             raise ValidationError('Incorrect password.')
+
+
+class NewProjectForm(FlaskForm):
+    title = StringField('Title', validators=[DataRequired()])
+    description = TextAreaField('Description',
+                                validators=[Length(max=512), Optional()])
+    submit = SubmitField('Post')
