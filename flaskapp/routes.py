@@ -76,7 +76,7 @@ def profile(username):
     """
 
     return render_template('profile.html', title=user.username+'\'s Profile',
-                            user=user, skillTags=tags, image_file=image_file)
+                            user=user, image_file=image_file)
 
 
 @app.route("/delete_account", methods=["POST"])
@@ -102,7 +102,7 @@ def save_picture(form_picture):
     return picture_fn
 
 
-@app.route("/update_profile", methods=["POST", 'GET'])
+@app.route("/user/update_profile", methods=["POST", 'GET'])
 @login_required
 def update_profile():
     form = UpdateForm()
@@ -165,7 +165,7 @@ def update_profile():
 
             db.session.commit()
             flash(f'Your account has been updated.', 'success')
-            return redirect(url_for('profile'))
+            return redirect(url_for('profile', username=current_user.username))
         else:
             flash('Incorrect. Please check password', 'danger')
     image_file = url_for('static', filename='profile_pics/' + current_user.image_file)
@@ -249,7 +249,7 @@ def delete_project(project_id):
 
     return redirect(url_for('home'))
 
-    
+
 @app.route("/search", methods=["POST", 'GET'])
 def search():
     # todo - when username no input, search by skills, list all user with those skills
