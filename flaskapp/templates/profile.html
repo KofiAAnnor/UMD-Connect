@@ -7,18 +7,18 @@
           <img class="rounded-circle account-img mt-3" src="{{ image_file }}">
           <div class="media-body">
             <br>
-            <h1 class="account-heading"><b>{{ current_user.username }}</b></h1>
+            <h1 class="account-heading"><b>{{ user.username }}</b></h1>
             <div class="row justify-content-end pr-3">
               <div class="col">
-                <p class="text-secondary">{{ current_user.email }}</p>
+                <p class="text-secondary">{{ user.email }}</p>
               </div>
               <div class="col-auto-3">
-                <a class="btn btn-outline-info" href="{{ url_for('update') }}">Update Profile</a>
+                <a class="btn btn-outline-info" href="{{ url_for('update_profile') }}">Update Profile</a>
               </div>
               <div class="col-auto"></div>
               <div class="col-auto-2">
                 <form action="{{url_for('delete_account')}}" method="POST">
-                  <input type="hidden" value={{current_user.email}} name="email"/>
+                  <input type="hidden" value={{user.email}} name="email"/>
                   <input type="submit" value="Delete Account" class="btn btn-outline-danger" onclick="return confirm('Are you sure?');"/>
                 </form>
               </div>
@@ -34,7 +34,7 @@
 
               <br><br>
               <span class="badge">Description:</span>
-              <textarea class="form-control" readonly>{% if current_user.description %}{{ current_user.description }}{% endif %}</textarea>
+              <textarea class="form-control" readonly>{% if user.description %}{{ user.description }}{% endif %}</textarea>
             </div>
 
           </div>

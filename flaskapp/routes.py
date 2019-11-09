@@ -1,8 +1,8 @@
 import os
 import secrets
-from flask import render_template, url_for, flash, redirect, request
+from flask import render_template, url_for, flash, redirect, request, abort
 from flaskapp import app, db, bcrypt
-from flaskapp.forms import RegistrationForm, LoginForm, UpdateForm,SearchForm
+from flaskapp.forms import RegistrationForm, LoginForm, UpdateForm, SearchForm, NewProjectForm
 from flaskapp.models import User, Project, Business, Technology, Literature, Art, Music
 from flask_login import login_user, current_user, logout_user, login_required
 from PIL import Image
@@ -12,7 +12,11 @@ from PIL import Image
 @app.route("/home")
 @login_required
 def home():
-    return render_template('home.html', title="Home")
+    your_projects = Project.query.filter_by(user_id=current_user.id)\
+                    .order_by(Project.date_posted.desc()).limit(3).all()
+    projects = Project.query.filter(Project.user_id != current_user.id)\
+                    .order_by(Project.date_posted.desc()).limit(6).all()
+    return render_template('home.html', title="Home", projects=projects, your_projects=your_projects)
 
 
 @app.route("/register", methods=['GET', 'POST'])
@@ -57,10 +61,11 @@ def logout():
     return redirect(url_for('login'))
 
 
-@app.route("/profile")
+@app.route("/user/<string:username>/profile")
 @login_required
-def profile():
-    user = User.query.filter_by(email=current_user.email).first()
+def profile(username):
+    user = User.query.filter_by(username=username).first_or_404()
+    image_file = url_for('static', filename='profile_pics/' + user.image_file)
     """tags = {
         "BusinessTag": Business.query.filter_by(name=user.username).first(),
         "LiteratureTag": Literature.query.filter_by(name=user.username).first(),
@@ -69,8 +74,9 @@ def profile():
         "MusicTag": Music.query.filter_by(name=user.username).first(),
     }
     """
-    image_file = url_for('static', filename='profile_pics/' + current_user.image_file)
-    return render_template('profile.html', title='Profile', image_file=image_file)
+
+    return render_template('profile.html', title=user.username+'\'s Profile',
+                            user=user, skillTags=tags, image_file=image_file)
 
 
 @app.route("/delete_account", methods=["POST"])
@@ -95,9 +101,10 @@ def save_picture(form_picture):
 
     return picture_fn
 
-@app.route("/update", methods=["POST", 'GET'])
+
+@app.route("/update_profile", methods=["POST", 'GET'])
 @login_required
-def update():
+def update_profile():
     form = UpdateForm()
     #bus = Business.query.filter_by(name=current_user.username, type="user").first()
     #tec = Technology.query.filter_by(name=current_user.username, type="user").first()
@@ -161,20 +168,88 @@ def update():
             return redirect(url_for('profile'))
         else:
             flash('Incorrect. Please check password', 'danger')
-
     image_file = url_for('static', filename='profile_pics/' + current_user.image_file)
-    return render_template('update.html', title='Update', form=form, image_file=image_file)
+    return render_template('update-profile.html', title='Update Profile', form=form, image_file=image_file)
 
 
-@app.route("/project-board")
-def project_board_page():
-    return render_template('project-board.html', title='Project Board')
+
+@app.route("/user/<string:username>/project_board")
+@login_required
+def project_board(username):
+    user = User.query.filter_by(username=username).first_or_404()
+    page = request.args.get('page', 1, type=int)
+    projects = Project.query.filter_by(user_id=current_user.id).paginate(page=page, per_page=6)
+
+    return render_template('project-board.html', title='Project Board', user=user, projects=projects)
 
 
-@app.route("/project-detail")
-def project_detail_view():
-    return render_template('project-detail-view.html', title='Project Detail')
+@app.route("/explore")
+@login_required
+def explore():
+    page = request.args.get('page', 1, type=int)
+    projects = Project.query.filter(Project.user_id != current_user.id)\
+                            .paginate(page=page, per_page=6)
 
+    return render_template('explore.html', title="Explore", projects=projects)
+
+
+@app.route("/project/new", methods=['GET', 'POST'])
+@login_required
+def new_project():
+    form = NewProjectForm()
+    if form.validate_on_submit():
+        project = Project(title=form.title.data, description=form.description.data,
+                            author=current_user)
+        db.session.add(project)
+        db.session.commit()
+        flash('Your project has been created!', 'success')
+
+        return redirect(url_for('project_detail_view', project_id=project.id))
+    return render_template('project.html', title='New Project', form=form,
+                                legend='New Project')
+
+
+@app.route("/project/<int:project_id>")
+@login_required
+def project_detail_view(project_id):
+    project = Project.query.get_or_404(project_id)
+    return render_template('project-detail-view.html', title='Project Detail', project=project)
+
+
+@app.route("/project/<int:project_id>/update", methods=['GET', 'POST'])
+@login_required
+def update_project(project_id):
+    project = Project.query.get_or_404(project_id)
+    if project.author != current_user:
+        abort(403)
+    form = NewProjectForm()
+    if form.validate_on_submit():
+        project.title = form.title.data
+        project.description = form.description.data
+        db.session.commit()
+        flash('Your project has been updated!', 'success')
+        return redirect(url_for('project_detail_view', project_id=project.id))
+    elif request.method == 'GET':
+        form.title.data = project.title
+        form.description.data = project.description
+
+    return render_template('project.html', title='Update Project', form=form,
+                            legend='Update Project')
+
+
+@app.route("/project/<int:project_id>/delete", methods=['POST'])
+@login_required
+def delete_project(project_id):
+    project = Project.query.get_or_404(project_id)
+    if project.author != current_user:
+        abort(403)
+    db.session.delete(project)
+    db.session.commit()
+    flash('Project '+ project.title +' has been deleted!', 'success')
+
+    return redirect(url_for('home'))
+
+    
 @app.route("/search", methods=["POST", 'GET'])
 def search():
     # todo - when username no input, search by skills, list all user with those skills
