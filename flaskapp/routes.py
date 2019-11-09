@@ -9,8 +9,10 @@ from flask_login import login_user, current_user, logout_user, login_required
 @app.route("/home")
 @login_required
 def home():
-    your_projects = Project.query.filter_by(user_id=current_user.id).order_by(Project.date_posted.desc()).limit(3).all()
-    projects = Project.query.filter(Project.user_id != current_user.id).order_by(Project.date_posted.desc()).limit(6).all()
+    your_projects = Project.query.filter_by(user_id=current_user.id)\
+                    .order_by(Project.date_posted.desc()).limit(3).all()
+    projects = Project.query.filter(Project.user_id != current_user.id)\
+                    .order_by(Project.date_posted.desc()).limit(6).all()
     return render_template('home.html', title="Home", projects=projects, your_projects=your_projects)
 
 
@@ -56,10 +58,11 @@ def logout():
     return redirect(url_for('login'))
 
 
-@app.route("/profile")
+@app.route("/user/<string:username>/profile")
 @login_required
-def profile():
-    user = User.query.filter_by(email=current_user.email).first()
+def profile(username):
+    user = User.query.filter_by(username=username).first_or_404()
+    image_file = url_for('static', filename='profile_pics/' + user.image_file)
     tags = {
         "BusinessTag": Business.query.filter_by(name=user.username).first(),
         "LiteratureTag": Literature.query.filter_by(name=user.username).first(),
@@ -67,8 +70,9 @@ def profile():
         "ArtTag": Art.query.filter_by(name=user.username).first(),
         "MusicTag": Music.query.filter_by(name=user.username).first(),
     }
-    image_file = url_for('static', filename='profile_pics/' + current_user.image_file)
-    return render_template('profile.html', title='Profile', skillTags=tags, image_file=image_file)
+
+    return render_template('profile.html', title=user.username+'\'s Profile',
+                            user=user, skillTags=tags, image_file=image_file)
 
 
 @app.route("/delete_account", methods=["POST"])
@@ -139,19 +143,23 @@ def update_profile():
                             bus=bus, tec=tec, mu=mu, art=ar, lit=lit)
 
 
-@app.route("/project_board")
+@app.route("/user/<string:username>/project_board")
 @login_required
-def project_board ():
+def project_board(username):
+    user = User.query.filter_by(username=username).first_or_404()
     page = request.args.get('page', 1, type=int)
     projects = Project.query.filter_by(user_id=current_user.id).paginate(page=page, per_page=6)
-    return render_template('project-board.html', title='Project Board', projects=projects)
+
+    return render_template('project-board.html', title='Project Board', user=user, projects=projects)
 
 
 @app.route("/explore")
 @login_required
 def explore():
     page = request.args.get('page', 1, type=int)
-    projects = Project.query.filter(Project.user_id != current_user.id).paginate(page=page, per_page=6)
+    projects = Project.query.filter(Project.user_id != current_user.id)\
+                            .paginate(page=page, per_page=6)
+
     return render_template('explore.html', title="Explore", projects=projects)
 
 
@@ -160,12 +168,13 @@ def explore():
 def new_project():
     form = NewProjectForm()
     if form.validate_on_submit():
-        project = Project(title=form.title.data, description=form.description.data, author=current_user)
+        project = Project(title=form.title.data, description=form.description.data,
+                            author=current_user)
         db.session.add(project)
         db.session.commit()
         flash('Your project has been created!', 'success')
-        return redirect(url_for('project_detail_view', project_id=project.id))
 
+        return redirect(url_for('project_detail_view', project_id=project.id))
     return render_template('project.html', title='New Project', form=form,
                                 legend='New Project')
 
@@ -207,4 +216,5 @@ def delete_project(project_id):
     db.session.delete(project)
     db.session.commit()
     flash('Project '+ project.title +' has been deleted!', 'success')
+
     return redirect(url_for('home'))

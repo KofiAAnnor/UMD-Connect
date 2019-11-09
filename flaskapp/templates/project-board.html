@@ -2,8 +2,8 @@
 {% block content %}
 <section class="your-projects">
   <div class="container">
-    <h2>Your Projects</h2>
-
+    <h2>Projects by {{ user.username }}</h2>
+    <hr>
       {% if projects.items %}
         {% for project in projects.items %}
           <article class="media content-section col-lg-6">
@@ -12,7 +12,7 @@
               alt="'static', filename='profile_pics/default.jpg') ">
             <div class="media-body">
               <div class="article-metadata">
-                <span class="mr-2">{{ project.author.username }}</span>
+                <a class="mr-2" href="{{ url_for('profile', username=user.username) }}">{{ project.author.username }}</a>
                 <small class="text-muted">{{ project.date_posted.strftime("%m/%d/%Y, %I:%M%p") }}</small>
               </div>
               <h4><a class="article-title" href="{{ url_for('project_detail_view', project_id=project.id) }}">{{ project.title }}</a></h4>

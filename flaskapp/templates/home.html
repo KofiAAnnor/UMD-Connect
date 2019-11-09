@@ -12,7 +12,7 @@
               alt="'static', filename='profile_pics/default.jpg') ">
             <div class="media-body">
               <div class="article-metadata">
-                <a class="mr-2" href="#">{{ project.author.username }}</a>
+                <a class="mr-2" href="{{ url_for('profile', username= project.author.username) }}">{{ project.author.username }}</a>
                 <small class="text-muted">{{ project.date_posted.strftime("%m/%d/%Y, %I:%M%p") }}</small>
               </div>
               <h4><a class="article-title" href="{{ url_for('project_detail_view', project_id=project.id) }}">{{ project.title }}</a></h4>
@@ -21,7 +21,7 @@
           </article>
         {% endfor %}
         <br>
-        <a href="{{ url_for('project_board') }}">See all...></a>
+        <a href="{{ url_for('project_board', username=current_user.username) }}">See all...></a>
       {% else %}
         <span>Seems like you don't have any projects.
           <a href="{{ url_for('new_project') }}">Create one now.</a>
@@ -42,7 +42,7 @@
               alt="'static', filename='profile_pics/default.jpg') ">
             <div class="media-body">
               <div class="article-metadata">
-                <a class="mr-2" href="#">{{ project.author.username }}</a>
+                <a class="mr-2" href="{{ url_for('profile', username= project.author.username) }}">{{ project.author.username }}</a>
                 <small class="text-muted">{{ project.date_posted.strftime("%m/%d/%Y, %I:%M%p") }}</small>
               </div>
               <h4><a class="article-title" href="{{ url_for('project_detail_view', project_id=project.id) }}">{{ project.title }}</a></h4>

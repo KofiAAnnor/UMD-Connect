@@ -3,7 +3,7 @@
 <section class="Explore">
   <div class="container">
     <h2>Explore</h2>
-
+    <hr>
     {% if projects.items %}
       {% for project in projects.items %}
         <article class="media content-section col-lg-4">
@@ -12,7 +12,7 @@
             alt="'static', filename='profile_pics/default.jpg') ">
           <div class="media-body">
             <div class="article-metadata">
-              <a class="mr-2" href="{{ url_for('profile') }}">{{ project.author.username }}</a>
+              <a class="mr-2" href="{{ url_for('profile', username=project.author.username) }}">{{ project.author.username }}</a>
               <small class="text-muted">{{ project.date_posted.strftime("%m/%d/%Y, %I:%M%p") }}</small>
             </div>
             <h4><a class="article-title" href="{{ url_for('project_detail_view', project_id=project.id) }}">{{ project.title }}</a></h4>
@@ -29,7 +29,7 @@
           {% else %}
             btn-outline-info
           {% endif %}
-          "></a>
+          ">{{ page_num }}</a>
         {% else %}
           ...
         {% endif %}
