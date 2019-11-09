@@ -9,8 +9,8 @@ from flask_login import login_user, current_user, logout_user, login_required
 @app.route("/home")
 @login_required
 def home():
-    projects = Project.query.filter(Project.user_id != current_user.id).all()
-    your_projects = Project.query.filter_by(user_id=current_user.id).all()
+    your_projects = Project.query.filter_by(user_id=current_user.id).order_by(Project.date_posted.desc()).limit(3).all()
+    projects = Project.query.filter(Project.user_id != current_user.id).order_by(Project.date_posted.desc()).limit(6).all()
     return render_template('home.html', title="Home", projects=projects, your_projects=your_projects)
 
 
@@ -80,9 +80,9 @@ def delete_account():
     return logout()
 
 
-@app.route("/update", methods=["POST", 'GET'])
+@app.route("/update_profile", methods=["POST", 'GET'])
 @login_required
-def update():
+def update_profile():
     form = UpdateForm()
     bus = Business.query.filter_by(name=current_user.username, type="user").first()
     tec = Technology.query.filter_by(name=current_user.username, type="user").first()
@@ -135,12 +135,24 @@ def update():
             return redirect(url_for('profile'))
         else:
             flash('Incorrect. Please check password', 'danger')
-    return render_template('update.html', title='Update', form=form, bus=bus, tec=tec, mu=mu, art=ar, lit=lit)
+    return render_template('update-profile.html', title='Update Profile', form=form,
+                            bus=bus, tec=tec, mu=mu, art=ar, lit=lit)
 
 
-@app.route("/project-board")
-def project_board_page():
-    return render_template('project-board.html', title='Project Board')
+@app.route("/project_board")
+@login_required
+def project_board ():
+    page = request.args.get('page', 1, type=int)
+    projects = Project.query.filter_by(user_id=current_user.id).paginate(page=page, per_page=6)
+    return render_template('project-board.html', title='Project Board', projects=projects)
+
+
+@app.route("/explore")
+@login_required
+def explore():
+    page = request.args.get('page', 1, type=int)
+    projects = Project.query.filter(Project.user_id != current_user.id).paginate(page=page, per_page=6)
+    return render_template('explore.html', title="Explore", projects=projects)
 
 
 @app.route("/project/new", methods=['GET', 'POST'])

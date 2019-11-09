@@ -1,5 +1,4 @@
 {% extends "layout.html" %}
-
 {% block content %}
 <section class="your-projects">
   <div class="container">
@@ -21,10 +20,12 @@
             </div>
           </article>
         {% endfor %}
+        <br>
+        <a href="{{ url_for('project_board') }}">See all...></a>
       {% else %}
-      <span>Seems like you don't have any projects.
-        <a href="{{ url_for('new_project') }}">Create one now.</a>
-      </span>
+        <span>Seems like you don't have any projects.
+          <a href="{{ url_for('new_project') }}">Create one now.</a>
+        </span>
       {% endif %}
     </div>
 </section>
@@ -49,8 +50,10 @@
             </div>
           </article>
         {% endfor %}
+        <br>
+        <a href="{{ url_for('explore') }}">See all...></a>
       {% else %}
-      <span>Hmm...Seems like we can't find any other projects.</span>
+        <span>Hmm...Seems like we can't find any other projects.</span>
       {% endif %}
     </div>
 </section>

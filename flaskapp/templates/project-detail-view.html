@@ -8,7 +8,7 @@
       alt="'static', filename='profile_pics/default.jpg') ">
     <div class="media-body">
       <div class="article-metadata">
-        <a class="mr-2" href="#">{{ project.author.username }}</a>
+        <a class="mr-2" href="{{ url_for('profile') }}">{{ project.author.username }}</a>
         <small class="text-muted">{{ project.date_posted.strftime("%m/%d/%Y, %I:%M%p") }}</small>
         {% if project.author == current_user %}
         <div>
