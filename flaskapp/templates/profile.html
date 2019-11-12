@@ -13,14 +13,18 @@
                 <p class="text-secondary">{{ user.email }}</p>
               </div>
               <div class="col-auto-3">
+                {% if current_user.username==user.username %}
                 <a class="btn btn-outline-info" href="{{ url_for('update_profile') }}">Update Profile</a>
+                {% endif %}
               </div>
               <div class="col-auto"></div>
               <div class="col-auto-2">
-                <form action="{{url_for('delete_account')}}" method="POST">
-                  <input type="hidden" value={{user.email}} name="email"/>
-                  <input type="submit" value="Delete Account" class="btn btn-outline-danger" onclick="return confirm('Are you sure?');"/>
-                </form>
+                 {% if current_user.username==user.username %}
+                  <form action="{{url_for('delete_account')}}" method="POST">
+                    <input type="hidden" value={{user.email}} name="email"/>
+                    <input type="submit" value="Delete Account" class="btn btn-outline-danger" onclick="return confirm('Are you sure?');"/>
+                  </form>
+                 {% endif %}
               </div>
             </div>
             <hr>
