@@ -59,14 +59,16 @@ def logout():
 def profile():
     user = User.query.filter_by(email=current_user.email).first()
     tags = {
-        "BusinessTag": Business.query.filter_by(name=user.username).first(),
-        "LiteratureTag": Literature.query.filter_by(name=user.username).first(),
-        "TechnologyTag": Technology.query.filter_by(name=user.username).first(),
-        "ArtTag": Art.query.filter_by(name=user.username).first(),
-        "MusicTag": Music.query.filter_by(name=user.username).first(),
+        "BusinessTag": User.query.filter_by(business=True, username=user.username).first(),
+        "LiteratureTag": User.query.filter_by(literature=True, username=user.username).first(),
+        "TechnologyTag": User.query.filter_by(technology=True, username=user.username).first(),
+        "ArtTag": User.query.filter_by(art=True, username=user.username).first(),
+        "MusicTag": User.query.filter_by(music=True, username=user.username).first(),
     }
+    user_projects = Project.query.filter_by(user_id=current_user.get_id()).all()
+
     image_file = url_for('static', filename='profile_pics/' + current_user.image_file)
-    return render_template('profile.html', title='Profile', skillTags=tags, image_file=image_file)
+    return render_template('profile.html', title='Profile', skillTags=tags, image_file=image_file, projects=user_projects)
 
 
 @app.route("/delete_account", methods=["POST"])
@@ -138,6 +140,55 @@ def project_board_page():
     return render_template('project-board.html', title='Project Board')
 
 
-@app.route("/project-detail")
+
+@app.route("/project-detail" , methods=["POST", 'GET'])
+@login_required
 def project_detail_view():
-    return render_template('project-detail-view.html', title='Project Detail')
+    if request.method == 'POST':
+        image_file = url_for('static', filename='profile_pics/project-default-image.jpg')
+        proj = Project.query.filter_by(id=request.form["projectId"]).first()
+        if request.form['submit_button'] == "View":
+            return render_template('project-detail-view.html', title='Project Detail', project=proj, image_file=image_file)
+    else:
+        return redirect(url_for('profile'))
+
+
+@app.route("/add-project" , methods=["POST", 'GET'])
+@login_required
+def add_project():
+    if request.method == 'POST':
+        project_name = request.form['ProjectName']
+        project_description = request.form['ProjectDescription']
+        project_status = request.form.get('projectStatus')
+        if project_status is not None:
+            project = Project(title=project_name, content=project_description, user_id=current_user.get_id(), status="open")
+        else:
+            project = Project(title=project_name, content=project_description, user_id=current_user.get_id(), status="closed")
+        db.session.add(project)
+        db.session.commit()
+        flash(f'Your project has been added.', 'success')
+        return redirect(url_for('profile'))
+    return render_template('add-project.html', title='Profile')
+
+
+@app.route("/update-project", methods=["POST", 'GET'])
+@login_required
+def update_project():
+    if request.form['submit_button'] == "Edit":
+        proj = Project.query.filter_by(id=request.form["projectId"]).first()
+        return render_template('update-project.html', title='Edit Project', project=proj)
+    elif request.form['submit_button'] == "edit_project":
+        proj = Project.query.filter_by(id=request.form["projectId"]).first()
+        proj.title = request.form['ProjectName']
+        proj.content = request.form['ProjectDescription']
+        project_status = request.form.get('projectStatus')
+        if project_status is not None:
+            proj.status = "open"
+        else:
+            proj.status = "closed"
+        db.session.commit()
+        flash(f'Your project has been updated.', 'success')
+        proj = Project.query.filter_by(id=request.form['projectId']).first()
+    return redirect(url_for('profile'))
+
+

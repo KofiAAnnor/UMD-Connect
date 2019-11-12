@@ -1,49 +1,90 @@
 {% extends "layout.html" %}
 {% block content %}
-    <div class="container">
-      <div class="content-section">
-        <div class="media">
-          <img class="rounded-circle account-img mt-3" src="{{ image_file }}">
-          <div class="media-body">
-            <br>
-            <h1 class="account-heading"><b>{{ current_user.username }}</b></h1>
-            <div class="row justify-content-end pr-3">
-              <div class="col">
-                <p class="text-secondary">{{ current_user.email }}</p>
-              </div>
-              <div class="col-auto-3">
-                <a class="btn btn-outline-info" href="{{ url_for('update') }}">Update Profile</a>
-              </div>
-              <div class="col-auto"></div>
-              <div class="col-auto-2">
-                <form action="{{url_for('delete_account')}}" method="POST">
-                  <input type="hidden" value={{current_user.email}} name="email"/>
-                  <input type="submit" value="Delete Account" class="btn btn-outline-danger" onclick="return confirm('Are you sure?');"/>
-                </form>
-              </div>
-            </div>
-            <hr>
-            <div>
-              <span class="badge badge-dark">SKILLS:</span>
-              {% if skillTags.BusinessTag != None %} <span class="badge badge-primary">Business</span>{% endif %}
-              {% if skillTags.LiteratureTag != None %} <span class="badge badge-info">Literature</span>{% endif %}
-              {% if skillTags.TechnologyTag != None %} <span class="badge badge-success">Technology</span>{% endif %}
-              {% if skillTags.ArtTag != None %} <span class="badge badge-warning">Art</span>{% endif %}
-              {% if skillTags.MusicTag != None %} <span class="badge badge-danger">Music</span>{% endif %}
-
-              <br><br>
-              <span class="badge">Description:</span>
-              <textarea class="form-control" readonly>
+<div class="container">
+  <div class="content-section">
+    <div class="media">
+      <img class="rounded-circle account-img mt-3" src="{{ image_file }}">
+      <div class="media-body">
+        <br>
+        <h1 class="account-heading"><b>{{ current_user.username }}</b></h1>
+        <div class="row justify-content-end pr-3">
+          <div class="col">
+            <p class="text-secondary">{{ current_user.email }}</p>
+          </div>
+          <div class="col-auto-3">
+            <a class="btn btn-outline-info" href="{{ url_for('update') }}">Update Profile</a>
+          </div>
+          <div class="col-auto"></div>
+          <div class="col-auto-2">
+            <form action="{{url_for('delete_account')}}" method="POST">
+              <input type="hidden" value={{current_user.email}} name="email"/>
+              <input type="submit" value="Delete Account" class="btn btn-outline-danger" onclick="return confirm('Are you sure?');"/>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    <hr>
+    <div>
+      <span class="badge badge-dark">SKILLS:</span>
+      {% if skillTags.BusinessTag != None %} <span class="badge badge-primary">Business</span>{% endif %}
+      {% if skillTags.LiteratureTag != None %} <span class="badge badge-info">Literature</span>{% endif %}
+      {% if skillTags.TechnologyTag != None %} <span class="badge badge-success">Technology</span>{% endif %}
+      {% if skillTags.ArtTag != None %} <span class="badge badge-warning">Art</span>{% endif %}
+      {% if skillTags.MusicTag != None %} <span class="badge badge-danger">Music</span>{% endif %}
+      <br><br>
+      <span class="badge">Description:</span>
+      <textarea class="form-control" readonly>
                 {% if current_user.description %}
                   {{ current_user.description }}
                 {% endif %}
               </textarea>
-            </div>
-
-          </div>
-        </div>
-
-        <br>
-      </div>
     </div>
+    <br><h2><b>Projects</b></h2>
+    <div class="col-auto-3">
+      <a class="btn btn-outline-info" href="{{ url_for('add_project') }}">Add Project</a>
+      <br>
+      <br>
+    </div>
+    {% if projects != None%}
+
+      {% for item in projects %}
+
+      <div class="card">
+        <h5 class="card-header">{{item.title}}</h5>
+        <div class="card-body">
+          <h5 class="card-title">{{item.title}}</h5>
+          <p class="card-text">{{item.content}}</p>
+
+
+          <div class="col-auto-3">
+            <nobr>
+              <div class="btn-group" style="width:100%">
+              <form action="{{url_for('project_detail_view')}}" method="POST">
+                <input type="hidden" value={{item.id}} name="projectId"/>
+                <input type="submit"  name ="submit_button" value="View" class="btn btn-outline-success  btn-sm"/>
+              </form>
+              <form action="{{url_for('update_project')}}" method="POST">
+                <input type="hidden" value={{item.id}} name="projectId"/>
+                <input type="submit" name ="submit_button" value="Edit" class="btn btn-outline-danger  btn-sm"/>
+              </form>
+              </div>
+            </nobr>
+          </div>     <br>
+          <span class="badge badge-dark">SKILLS:</span>
+          <span class="badge badge-primary">Business</span>
+          <span class="badge badge-info">Literature</span>
+          <span class="badge badge-success">Technology</span>
+          <span class="badge badge-warning">Art</span>
+          <span class="badge badge-danger">Music</span>
+        </div>
+      </div>
+      <br>
+      <br>
+      {% endfor %}
+    {% endif %}
+    <br>
+  </div>
+
+</div>
 {% endblock content %}

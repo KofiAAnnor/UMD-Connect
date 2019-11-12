@@ -2,7 +2,70 @@
 
 {% block content %}
 <div class="container">
-    <h1>Project Detail View</h1>
-    <p>Project view page goes here.</p>
+    <div class="content-section">
+        <div class="media">
+            <img class="rounded-circle account-img mt-3" src="{{ image_file }}">
+            <div class="media-body">
+                <div class="row justify-content-center pr-3">
+                    <h1 class="account-heading"><b>{{ project.title }}</b></h1>
+                </div>
+                <br>
+                <div class="row justify-content-center pr-3">
+                    <div class="col">
+                        <span  class="badge badge-dark">Owner: </span> @{{ current_user.username}}
+                    </div>
+                    <div class="col">
+                        <span class="badge badge-dark">Status:</span> {{ project.status }}
+                    </div>
+                    <div class="col">
+                        <span class="badge badge-dark">Email:</span> {{ current_user.email }}
+                    </div>
+                </div>
+                <hr>
+                <div>
+                    <span class="badge badge-dark">Looking For:</span>
+                    <span class="badge badge-primary">Business</span>
+                    <span class="badge badge-info">Literature</span>
+                    <span class="badge badge-success">Technology</span>
+                    <span class="badge badge-warning">Art</span>
+                    <span class="badge badge-danger">Music</span>
+                    <br><br>
+                    <span class="badge badge-dark">Description:</span>
+                    <p>{{ project.content }}</p>
+                </div>
+                <br>
+
+                <div class="row justify-content-center pr-3">
+                    <br><h2><b>Project Members</b></h2>
+                </div>
+                <div class="row justify-content-center pr-3">
+                    <h2><b>Image Gallery</b></h2>
+                </div>
+                <div class="row">
+                    <div class="col-lg-4 col-md-12 mb-4">
+                        <a><img class="img-fluid z-depth-1" src="{{ image_file }}" data-toggle="modal" data-target="#modal1"></a>
+                    </div>
+                    <div class="col-lg-4 col-md-12 mb-4">
+                        <a><img class="img-fluid z-depth-1" src="{{ image_file }}" data-toggle="modal" data-target="#modal1"></a>
+                    </div>
+                    <div class="col-lg-4 col-md-12 mb-4">
+                        <a><img class="img-fluid z-depth-1" src="{{ image_file }}" data-toggle="modal" data-target="#modal1"></a>
+                    </div>
+                    <div class="col-lg-4 col-md-12 mb-4">
+                        <a><img class="img-fluid z-depth-1" src="{{ image_file }}" data-toggle="modal" data-target="#modal1"></a>
+                    </div>
+                    <div class="col-lg-4 col-md-12 mb-4">
+                        <a><img class="img-fluid z-depth-1" src="{{ image_file }}" data-toggle="modal" data-target="#modal1"></a>
+                    </div>
+                    <div class="col-lg-4 col-md-12 mb-4">
+                        <a><img class="img-fluid z-depth-1" src="{{ image_file }}" data-toggle="modal" data-target="#modal1"></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <br>
+    </div>
+
 </div>
 {% endblock %}
