@@ -1,5 +1,60 @@
 {% extends "layout.html" %}
 {% block content %}
-    <div class="container">
+<section class="your-projects">
+  <div class="container">
+    <h2>Your Projects</h2>
+
+      {% if your_projects %}
+        {% for project in your_projects %}
+          <article class="media content-section col-lg-6">
+            <img class="rounded-circle article-img"
+              src="{{ url_for('static', filename='profile_pics/' + project.author.image_file) }}"
+              alt="'static', filename='profile_pics/default.jpg') ">
+            <div class="media-body">
+              <div class="article-metadata">
+                <a class="mr-2" href="{{ url_for('profile', username= project.author.username) }}">{{ project.author.username }}</a>
+                <small class="text-muted">{{ project.date_posted.strftime("%m/%d/%Y, %I:%M%p") }}</small>
+              </div>
+              <h4><a class="article-title" href="{{ url_for('project_detail_view', project_id=project.id) }}">{{ project.title }}</a></h4>
+              <p class="article-content">{{ project.description }}</p>
+            </div>
+          </article>
+        {% endfor %}
+        <br>
+        <a href="{{ url_for('project_board', username=current_user.username) }}">See all...></a>
+      {% else %}
+        <span>Seems like you don't have any projects.
+          <a href="{{ url_for('new_project') }}">Create one now.</a>
+        </span>
+      {% endif %}
     </div>
-{% endblock content %}
+</section>
+<hr>
+<section class="Explore">
+  <div class="container">
+    <h2>Explore</h2>
+
+      {% if projects %}
+        {% for project in projects %}
+          <article class="media content-section col-lg-4">
+            <img class="rounded-circle article-img"
+              src="{{ url_for('static', filename='profile_pics/' + project.author.image_file) }}"
+              alt="'static', filename='profile_pics/default.jpg') ">
+            <div class="media-body">
+              <div class="article-metadata">
+                <a class="mr-2" href="{{ url_for('profile', username= project.author.username) }}">{{ project.author.username }}</a>
+                <small class="text-muted">{{ project.date_posted.strftime("%m/%d/%Y, %I:%M%p") }}</small>
+              </div>
+              <h4><a class="article-title" href="{{ url_for('project_detail_view', project_id=project.id) }}">{{ project.title }}</a></h4>
+              <p class="article-content">{{ project.description }}</p>
+            </div>
+          </article>
+        {% endfor %}
+        <br>
+        <a href="{{ url_for('explore') }}">See all...></a>
+      {% else %}
+        <span>Hmm...Seems like we can't find any other projects.</span>
+      {% endif %}
+    </div>
+</section>
+{% endblock %}
