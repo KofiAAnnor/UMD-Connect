@@ -33,6 +33,11 @@
                 {% if user.art %} <span class="badge badge-warning">Art</span>{% endif %}
                 {% if user.music %} <span class="badge badge-danger">Music</span>{% endif %}<hr><br>
             {% endfor %}
+             {% for project in projects %}
+                Title: {{project.title}} <br>
+                Time: {{project.time}}<br>
+                Description: {{project.description}}<br>
+            {% endfor %}
         </form>
     </div>
 {% endblock content %}

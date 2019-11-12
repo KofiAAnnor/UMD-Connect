@@ -252,7 +252,6 @@ def delete_project(project_id):
 @app.route("/search", methods=["POST", 'GET'])
 @login_required
 def search():
-    # todo - display their project also
     form=SearchForm()
     if form.is_submitted():
         if form.name.data:
@@ -260,13 +259,14 @@ def search():
                 user=User.query.filter_by(username=form.name.data).first()
                 if form.type.data=="User" and user:
                     return render_template('search.html', title='Search', form=form,user={user})
-            else: #has not edit how porject will display as result
-                project=Project.query.filter_by(user_id=form.name.data).first()
-                return render_template('search.html', title='Search', form=form, user={project})
-        elif form.skills_tech.data or form.skills_lit.data or form.skills_art or \
+            else:
+                project=Project.query.filter_by(title=form.name.data).first()
+                if project:
+                    return render_template('search.html', title='Search', form=form, projects={project})
+        elif form.skills_tech.data or form.skills_lit.data or form.skills_art.data or \
                 form.skills_bus.data or form.skills_music.data:
-            users=[]
             if form.type.data=="User":
+                users=[]
                 if form.skills_bus.data:
                     u=User.query.filter_by(business=form.skills_bus.data).all()
                     for us in u:
@@ -291,6 +291,9 @@ def search():
                     for us in u:
                         if us not in users:
                             users.append(us)
-            return render_template('search.html',title='Search',form=form,user=users)
+                return render_template('search.html',title='Search',form=form,user=users)
+            else: #projects has no skill field yet
+                projects=[]
+                return render_template('search.html', title='Search', form=form, projects=projects)
 
     return render_template('search.html', title='Search', form=form)
