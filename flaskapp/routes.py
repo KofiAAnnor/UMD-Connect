@@ -97,31 +97,41 @@ def update():
                 user.email = form.new_email.data
             if form.username.data:
                 user.username = form.username.data
-            if form.skills_bus.data and not bus:
-                b = Business(name=user.username, type="user")
-                db.session.add(b)
-            elif not form.skills_bus.data and bus:
-                db.session.delete(bus)
-            if form.skills_lit.data and not lit:
-                b = Literature(name=user.username, type="user")
-                db.session.add(b)
-            elif not form.skills_lit.data and lit:
-                db.session.delete(lit)
-            if form.skills_tech.data and not tec:
-                b = Technology(name=user.username, type="user")
-                db.session.add(b)
-            elif not form.skills_tech.data and tec:
-                db.session.delete(tec)
-            if form.skills_art.data and not ar:
-                b = Art(name=user.username, type="user")
-                db.session.add(b)
-            elif not form.skills_art.data and ar:
-                db.session.delete(ar)
-            if form.skills_music.data and not mu:
-                b = Music(name=user.username, type="user")
-                db.session.add(b)
-            elif not form.skills_music.data and mu:
-                db.session.delete(mu)
+            if form.skills_bus.data and not current_user.business:
+                # b = Business(name=user.username, type="user")
+                # db.session.add(b)
+                current_user.business = True
+            elif not form.skills_bus.data and current_user.business:
+                # db.session.delete(bus)
+                current_user.business = False
+            if form.skills_lit.data and not current_user.literature:
+                # b = Literature(name=user.username, type="user")
+                # db.session.add(b)
+                current_user.literature = True
+            elif not form.skills_lit.data and current_user.literature:
+                # db.session.delete(lit)
+                current_user.literature = False
+            if form.skills_tech.data and not current_user.technology:
+                # b = Technology(name=user.username, type="user")
+                # db.session.add(b)
+                current_user.technology = True
+            elif not form.skills_tech.data and current_user.technology:
+                # db.session.delete(tec)
+                current_user.technology = False
+            if form.skills_art.data and not current_user.art:
+                # b = Art(name=user.username, type="user")
+                # db.session.add(b)
+                current_user.art = True
+            elif not form.skills_art.data and current_user.art:
+                # db.session.delete(ar)
+                current_user.art = False
+            if form.skills_music.data and not current_user.music:
+                # b = Music(name=user.username, type="user")
+                # db.session.add(b)
+                current_user.music = True
+            elif not form.skills_music.data and current_user.music:
+                # db.session.delete(mu)
+                current_user.music = False
             if form.new_password.data:
                 hashed_password = bcrypt.generate_password_hash(form.new_password.data).decode('utf-8')
                 user.password = hashed_password
@@ -164,6 +174,16 @@ def add_project():
             project = Project(title=project_name, content=project_description, user_id=current_user.get_id(), status="open")
         else:
             project = Project(title=project_name, content=project_description, user_id=current_user.get_id(), status="closed")
+        if request.form.get('business') is not None:
+            project.business = True;
+        if request.form.get('technology') is not None:
+            project.technology = True;
+        if request.form.get('music') is not None:
+            project.music = True;
+        if request.form.get('art') is not None:
+            project.art = True;
+        if request.form.get('literature') is not None:
+            project.literature = True;
         db.session.add(project)
         db.session.commit()
         flash(f'Your project has been added.', 'success')
@@ -186,6 +206,31 @@ def update_project():
             proj.status = "open"
         else:
             proj.status = "closed"
+
+        if request.form.get('business') is not None:
+            proj.business = True;
+        else:
+            proj.business = False;
+
+        if request.form.get('technology') is not None:
+            proj.technology = True;
+        else:
+            proj.technology = False;
+
+        if request.form.get('music') is not None:
+            proj.music = True;
+        else:
+            proj.music = False;
+
+        if request.form.get('art') is not None:
+            proj.art = True;
+        else:
+            proj.art = False;
+
+        if request.form.get('literature') is not None:
+            proj.literature = True;
+        else:
+            proj.literature = False;
         db.session.commit()
         flash(f'Your project has been updated.', 'success')
         proj = Project.query.filter_by(id=request.form['projectId']).first()

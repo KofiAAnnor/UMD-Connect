@@ -34,6 +34,11 @@ class Project(db.Model):
     content = db.Column(db.Text, nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     status = db.Column(db.String(20), nullable=False)
+    business = db.Column(db.Boolean, default=False)
+    technology = db.Column(db.Boolean, default=False)
+    art = db.Column(db.Boolean, default=False)
+    music = db.Column(db.Boolean, default=False)
+    literature = db.Column(db.Boolean, default=False)
 
 
     def __repr__(self):

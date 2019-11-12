@@ -24,11 +24,21 @@
                 <hr>
                 <div>
                     <span class="badge badge-dark">Looking For:</span>
+                     {% if project.business == True%}
                     <span class="badge badge-primary">Business</span>
+                    {% endif %}
+                    {% if project.literature == True%}
                     <span class="badge badge-info">Literature</span>
+                    {% endif %}
+                    {% if project.technology == True%}
                     <span class="badge badge-success">Technology</span>
+                    {% endif %}
+                    {% if project.art == True%}
                     <span class="badge badge-warning">Art</span>
+                    {% endif %}
+                    {% if project.music == True%}
                     <span class="badge badge-danger">Music</span>
+                    {% endif %}
                     <br><br>
                     <span class="badge badge-dark">Description:</span>
                     <p>{{ project.content }}</p>
