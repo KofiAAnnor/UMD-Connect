@@ -178,7 +178,6 @@ def project_detail_view():
 @app.route("/search", methods=["POST", 'GET'])
 @login_required
 def search():
-    # todo - when username no input, search by skills, list all user with those skills
     # todo - display their project also
     form=SearchForm()
     if form.is_submitted():
