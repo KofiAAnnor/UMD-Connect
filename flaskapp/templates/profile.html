@@ -31,7 +31,6 @@
               {% if user.technology %} <span class="badge badge-success">Technology</span>{% endif %}
               {% if user.art %} <span class="badge badge-warning">Art</span>{% endif %}
               {% if user.music %} <span class="badge badge-danger">Music</span>{% endif %}
-
               <br><br>
               <span class="badge">Description:</span>
               <textarea class="form-control" readonly>{% if user.description %}{{ user.description }}{% endif %}</textarea>

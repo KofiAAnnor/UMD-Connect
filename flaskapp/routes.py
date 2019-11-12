@@ -7,7 +7,6 @@ from flaskapp.models import User, Project, Business, Technology, Literature, Art
 from flask_login import login_user, current_user, logout_user, login_required
 from PIL import Image
 
-
 @app.route("/")
 @app.route("/home")
 @login_required
@@ -251,20 +250,47 @@ def delete_project(project_id):
 
 
 @app.route("/search", methods=["POST", 'GET'])
+@login_required
 def search():
-    # todo - when username no input, search by skills, list all user with those skills
     # todo - display their project also
     form=SearchForm()
-    user=User.query.filter_by(username=form.name.data).first()
-    project=Project.query.filter_by(user_id=form.name.data).first()
-    tags = {
-        "BusinessTag": Business.query.filter_by(name=form.name.data).first(),
-        "LiteratureTag": Literature.query.filter_by(name=form.name.data).first(),
-         "TechnologyTag": Technology.query.filter_by(name=form.name.data).first(),
-        "ArtTag": Art.query.filter_by(name=form.name.data).first(),
-        "MusicTag": Music.query.filter_by(name=form.name.data).first(),
-    }
-    if form.type.data=="User":
-        return render_template('search.html', title='Search', form=form,user=user,skillTags=tags)
-    else:
-        return render_template('search.html', title='Search', form=form, user=project,skillTags=tags)
+    if form.is_submitted():
+        if form.name.data:
+            if form.type.data=="User":
+                user=User.query.filter_by(username=form.name.data).first()
+                if form.type.data=="User":
+                    return render_template('search.html', title='Search', form=form,user={user})
+            else: #has not edit how porject will display as result
+                project=Project.query.filter_by(user_id=form.name.data).first()
+                return render_template('search.html', title='Search', form=form, user={project})
+        elif form.skills_tech.data or form.skills_lit.data or form.skills_art or \
+                form.skills_bus.data or form.skills_music.data:
+            users=[]
+            if form.type.data=="User":
+                if form.skills_bus.data:
+                    u=User.query.filter_by(business=form.skills_bus.data).all()
+                    for us in u:
+                        users.append(us)
+                if form.skills_tech.data:
+                    u=User.query.filter_by(technology=form.skills_tech.data).all()
+                    for us in u:
+                        if us not in users:
+                            users.append(us)
+                if form.skills_lit.data:
+                    u=User.query.filter_by(literature=form.skills_lit.data).all()
+                    for us in u:
+                        if us not in users:
+                            users.append(us)
+                if form.skills_art.data:
+                    u=User.query.filter_by(art=form.skills_art.data).all()
+                    for us in u:
+                        if us not in users:
+                            users.append(us)
+                if form.skills_music.data:
+                    u = User.query.filter_by(music=form.skills_music.data).all()
+                    for us in u:
+                        if us not in users:
+                            users.append(us)
+            return render_template('search.html',title='Search',form=form,user=users)
+
+    return render_template('search.html', title='Search', form=form)
