@@ -258,7 +258,7 @@ def search():
         if form.name.data:
             if form.type.data=="User":
                 user=User.query.filter_by(username=form.name.data).first()
-                if form.type.data=="User":
+                if form.type.data=="User" and user:
                     return render_template('search.html', title='Search', form=form,user={user})
             else: #has not edit how porject will display as result
                 project=Project.query.filter_by(user_id=form.name.data).first()
