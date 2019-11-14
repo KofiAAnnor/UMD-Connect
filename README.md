@@ -19,8 +19,8 @@ Final semester project for CMSC435 Fall 2019.
 
 To run the application in development mode:
 
-    $ export FLASK_APP=run.py
+    $ export FLASK_APP=flaskapp
     $ export FLASK_ENV=development
-    $ flask run
+    $ python run.py
 
 - Please post a message on Slack if any of these steps still cause errors.
