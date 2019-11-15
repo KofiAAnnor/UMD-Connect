@@ -1,7 +1,7 @@
 from flask import render_template, url_for, flash, redirect, request
 from flaskapp import app, db, bcrypt
 from flaskapp.forms import RegistrationForm, LoginForm, UpdateForm
-from flaskapp.models import User, Project, Business, Technology, Literature, Art, Music
+from flaskapp.models import User, Project, Business, Technology, Literature, Art, Music, ProjectMembers
 from flask_login import login_user, current_user, logout_user, login_required
 
 
@@ -65,10 +65,20 @@ def profile():
         "ArtTag": User.query.filter_by(art=True, username=user.username).first(),
         "MusicTag": User.query.filter_by(music=True, username=user.username).first(),
     }
-    user_projects = Project.query.filter_by(user_id=current_user.get_id()).all()
-
+    user_personal_projects = []
+    user_collab_projects = []
+    all_users_projects = ProjectMembers.query.filter_by(user_id=current_user.get_id()).all()
+    for proj in all_users_projects:
+        proj_id = proj.project_id
+        user_project = Project.query.filter_by(id=proj_id).first()
+        if str(user_project.user_id) == str(current_user.get_id()):
+            user_personal_projects.append(user_project)
+        else:
+            user_collab_projects.append(user_project)
     image_file = url_for('static', filename='profile_pics/' + current_user.image_file)
-    return render_template('profile.html', title='Profile', skillTags=tags, image_file=image_file, projects=user_projects)
+    flash(user_personal_projects)
+    flash(user_collab_projects)
+    return render_template('profile.html', title='Profile', skillTags=tags, image_file=image_file, personal_projects=user_personal_projects, collab_projects=user_collab_projects)
 
 
 @app.route("/delete_account", methods=["POST"])
@@ -157,8 +167,14 @@ def project_detail_view():
     if request.method == 'POST':
         image_file = url_for('static', filename='profile_pics/project-default-image.jpg')
         proj = Project.query.filter_by(id=request.form["projectId"]).first()
+        members_query= ProjectMembers.query.filter_by(project_id=request.form["projectId"])
+        user = User.query.filter_by(id=proj.user_id).first()
+        project_members = []
+        for x in members_query:
+            name = User.query.filter_by(id=x.user_id).first().username
+            project_members.append(name)
         if request.form['submit_button'] == "View":
-            return render_template('project-detail-view.html', title='Project Detail', project=proj, image_file=image_file)
+            return render_template('project-detail-view.html', title='Project Detail', project=proj, image_file=image_file, members=project_members, user=user)
     else:
         return redirect(url_for('profile'))
 
@@ -186,6 +202,11 @@ def add_project():
             project.literature = True;
         db.session.add(project)
         db.session.commit()
+
+        memberEntry = ProjectMembers(user_id=current_user.get_id(), project_id=project.id)
+        db.session.add(memberEntry)
+        db.session.commit()
+
         flash(f'Your project has been added.', 'success')
         return redirect(url_for('profile'))
     return render_template('add-project.html', title='Profile')
@@ -237,3 +258,51 @@ def update_project():
     return redirect(url_for('profile'))
 
 
+@app.route("/add-project-members" , methods=["POST", 'GET'])
+@login_required
+def add_project_members():
+    if request.form['submit_button'] == "Add":
+        memberId = User.query.filter_by(username=request.form["MemberName"]).first()
+        if memberId is None:
+            flash("User Doesnt Exist")
+            return redirect(url_for('profile'))
+        proj_member = ProjectMembers.query.filter_by(user_id=memberId.id, project_id=request.form["projectId"]).first()
+        if proj_member is not None:
+            flash("User Already Member")
+            return redirect(url_for('profile'))
+        memberEntry = ProjectMembers(user_id=memberId.id, project_id=request.form["projectId"])
+        db.session.add(memberEntry)
+        db.session.commit()
+        flash(f'Member has been added.', 'success')
+        return redirect(url_for('profile'))
+    else:
+        return render_template('add-project-members.html', title='Profile', id=request.form["projectId"])
+
+@app.route("/restricted-profile-view" , methods=["POST", 'GET'])
+@login_required
+def restricted_profile():
+    unames = request.form["submit_button"]
+    flash(unames)
+    if current_user.username == unames:
+        return redirect(url_for('profile'))
+    user = User.query.filter_by(username=unames).first()
+    tags = {
+        "BusinessTag": User.query.filter_by(business=True, username=user.username).first(),
+        "LiteratureTag": User.query.filter_by(literature=True, username=user.username).first(),
+        "TechnologyTag": User.query.filter_by(technology=True, username=user.username).first(),
+        "ArtTag": User.query.filter_by(art=True, username=user.username).first(),
+        "MusicTag": User.query.filter_by(music=True, username=user.username).first(),
+    }
+
+    user_personal_projects = []
+    user_collab_projects = []
+    all_users_projects = ProjectMembers.query.filter_by(user_id=user.id).all()
+    for proj in all_users_projects:
+        proj_id = proj.project_id
+        user_project = Project.query.filter_by(id=proj_id).first()
+        if str(user_project.user_id) == str(user.id):
+            user_personal_projects.append(user_project)
+        else:
+            user_collab_projects.append(user_project)
+    image_file = url_for('static', filename='profile_pics/' + user.image_file)
+    return render_template('restricted-profile-view.html', user=user, title='Profile', skillTags=tags, image_file=image_file, personal_projects=user_personal_projects, collab_projects=user_collab_projects)

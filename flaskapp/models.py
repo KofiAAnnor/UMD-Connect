@@ -88,3 +88,23 @@ class Music(db.Model):
 
     def __repr__(self):
         return f"Music('{self.type}', '{self.name}')"
+
+
+class ProjectMembers(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    project_id = db.Column(db.Integer,db.ForeignKey('project.id'), nullable=False)
+
+    def __repr__(self):
+        return f"ProjectMembers('{self.user_id}', '{self.user_id}', '{self.project_id}')"
+
+
+class ProjectMessages(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    date_posted = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    project_id = db.Column(db.Integer,db.ForeignKey('project.id'), nullable=False)
+    message = db.Column(db.String(1000), nullable=True)
+
+    def __repr__(self):
+        return f"ProjectMessages('{self.user_id}', '{self.project_id}')"

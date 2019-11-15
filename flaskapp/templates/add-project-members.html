@@ -1,0 +1,23 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="container">
+    <h1>Add Project Member</h1>
+
+    <div class="content-section">
+        <form method="POST" action="">
+            <form>
+                <div class="form-group">
+                    <label for="MemberName">Member Name</label>
+                    <input type="text" class="form-control" id="MemberName" name ="MemberName"  placeholder="Enter Member Name" required>
+                </div>
+                <input type="hidden" value={{id}} name="projectId"/>
+                <input type="submit" name ="submit_button" class="btn btn-primary" value="Add" />
+            </form>
+            <small class="text-muted ml-2">
+                <a href="javascript:history.back()">Cancel</a>
+            </small>
+        </form>
+    </div>
+</div>
+{% endblock %}

@@ -6,20 +6,13 @@
       <img class="rounded-circle account-img mt-3" src="{{ image_file }}">
       <div class="media-body">
         <br>
-        <h1 class="account-heading"><b>{{ current_user.username }}</b></h1>
+        <h1 class="account-heading"><b>{{ user.username }}</b></h1>
         <div class="row justify-content-end pr-3">
           <div class="col">
-            <p class="text-secondary">{{ current_user.email }}</p>
-          </div>
-          <div class="col-auto-3">
-            <a class="btn btn-outline-info" href="{{ url_for('update') }}">Update Profile</a>
+            <p class="text-secondary">{{ user.email }}</p>
           </div>
           <div class="col-auto"></div>
           <div class="col-auto-2">
-            <form action="{{url_for('delete_account')}}" method="POST">
-              <input type="hidden" value={{current_user.email}} name="email"/>
-              <input type="submit" value="Delete Account" class="btn btn-outline-danger" onclick="return confirm('Are you sure?');"/>
-            </form>
           </div>
         </div>
       </div>
@@ -27,32 +20,31 @@
     <hr>
     <div>
       <span class="badge badge-dark">SKILLS:</span>
-          {% if current_user.business == True%}
+          {% if user.business == True%}
           <span class="badge badge-primary">Business</span>
           {% endif %}
-          {% if current_user.literature == True%}
+          {% if user.literature == True%}
           <span class="badge badge-info">Literature</span>
           {% endif %}
-          {% if current_user.technology == True%}
+          {% if user.technology == True%}
           <span class="badge badge-success">Technology</span>
           {% endif %}
-          {% if current_user.art == True%}
+          {% if user.art == True%}
           <span class="badge badge-warning">Art</span>
           {% endif %}
-          {% if current_user.music == True%}
+          {% if user.music == True%}
           <span class="badge badge-danger">Music</span>
           {% endif %}
       <br><br>
       <span class="badge">Description:</span>
       <textarea class="form-control" readonly>
-                {% if current_user.description %}
-                  {{ current_user.description }}
+                {% if user.description %}
+                  {{ user.description }}
                 {% endif %}
               </textarea>
     </div>
     <br><h2><b>Personal Projects</b></h2>
     <div class="col-auto-3">
-      <a class="btn btn-outline-info" href="{{ url_for('add_project') }}">Add Project</a>
       <br>
       <br>
     </div>
@@ -62,20 +54,15 @@
         <div class="card-body">
           <h5 class="card-title">{{item.title}}</h5>
           <p class="card-text">{{item.content}}</p>
+
+
           <div class="col-auto-3">
             <nobr>
               <div class="btn-group" style="width:100%">
               <form action="{{url_for('project_detail_view')}}" method="POST">
+
                 <input type="hidden" value={{item.id}} name="projectId"/>
                 <input type="submit"  name ="submit_button" value="View" class="btn btn-outline-success  btn-sm"/>
-              </form>
-              <form action="{{url_for('update_project')}}" method="POST">
-                <input type="hidden" value={{item.id}} name="projectId"/>
-                <input type="submit" name ="submit_button" value="Edit" class="btn btn-outline-danger  btn-sm"/>
-              </form>
-                <form action="{{url_for('add_project_members')}}" method="POST">
-                <input type="hidden" value={{item.id}} name="projectId"/>
-                <input type="submit" name ="submit_button" value="Add Members" class="btn btn-outline-info  btn-sm"/>
               </form>
               </div>
             </nobr>
@@ -101,9 +88,10 @@
       <br>
       <br>
       {% endfor %}
-
-     <br><h2><b>Collaboration Projects</b></h2>
+    <br>
+       <br><h2><b>Collaboration Projects</b></h2>
     <div class="col-auto-3">
+      <br>
       <br>
     </div>
       {% for item in collab_projects %}
@@ -112,10 +100,13 @@
         <div class="card-body">
           <h5 class="card-title">{{item.title}}</h5>
           <p class="card-text">{{item.content}}</p>
+
+
           <div class="col-auto-3">
             <nobr>
               <div class="btn-group" style="width:100%">
               <form action="{{url_for('project_detail_view')}}" method="POST">
+
                 <input type="hidden" value={{item.id}} name="projectId"/>
                 <input type="submit"  name ="submit_button" value="View" class="btn btn-outline-success  btn-sm"/>
               </form>
@@ -143,8 +134,6 @@
       <br>
       <br>
       {% endfor %}
-
-    <br>
   </div>
 
 </div>
