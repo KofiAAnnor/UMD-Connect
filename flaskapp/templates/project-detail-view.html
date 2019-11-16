@@ -2,45 +2,75 @@
 
 {% block content %}
 <div class="container">
-  <article class="media content-section">
-    <img class="rounded-circle article-img"
+    <div class="content-section">
+        <div class="media">
+ <img class="rounded-circle article-img"
       src="{{ url_for('static', filename='profile_pics/' + project.author.image_file) }}"
-      alt="'static', filename='profile_pics/default.jpg') ">
-    <div class="media-body">
-      <div class="article-metadata">
-        <a class="mr-2" href="{{ url_for('profile', username=project.author.username) }}">{{ project.author.username }}</a>
-        <small class="text-muted">{{ project.date_posted.strftime("%m/%d/%Y, %I:%M%p") }}</small>
-        {% if project.author == current_user %}
-        <div>
-          <a class="btn btn-secondary btn-sm m-1" href="{{ url_for('update_project', project_id=project.id) }}">Update</a>
-          <button type="button" class="btn btn-danger btn-sm m-1" data-toggle="modal" data-target="#deleteModal">Delete</button>
+      alt="'static', filename='profile_pics/default.jpg') ">            <div class="media-body">
+                <div class="row justify-content-center pr-3">
+                    <h1 class="account-heading"><b>{{ project.title }}</b></h1>
+                </div>
+                <br>
+                <div class="row justify-content-center pr-3">
+                    <div class="col">
+                        <span  class="badge badge-dark">Owner: </span> @{{ user.username}}
+                    </div>
+                    <div class="col">
+                        <span class="badge badge-dark">Status:</span> {{ project.status }}
+                    </div>
+                    <div class="col">
+                        <span class="badge badge-dark">Email:</span> {{ user.email }}
+                    </div>
+                </div>
+                <hr>
+                <div>
+                    <span class="badge badge-dark">Looking For:</span>
+                     {% if project.business == True%}
+                    <span class="badge badge-primary">Business</span>
+                    {% endif %}
+                    {% if project.literature == True%}
+                    <span class="badge badge-info">Literature</span>
+                    {% endif %}
+                    {% if project.technology == True%}
+                    <span class="badge badge-success">Technology</span>
+                    {% endif %}
+                    {% if project.art == True%}
+                    <span class="badge badge-warning">Art</span>
+                    {% endif %}
+                    {% if project.music == True%}
+                    <span class="badge badge-danger">Music</span>
+                    {% endif %}
+                    <br><br>
+                    <span class="badge badge-dark">Description:</span>
+                    <p>{{ project.description }}</p>
+                  <h4 style="display: inline"> <span class="badge badge-dark">Project Members:</span></h4>
+                  {% for m in members%}
+                  <form  action="{{url_for('profile', username=m)}}" method="" style ="display: inline">
+                        <input type="submit" name ="submit_button" value="{{m}}" class=" btn-sm" style="background-color: #aaa9ad" onmouseover="this.style.backgroundColor='#006db9'" onmouseout="this.style.backgroundColor='#aaa9ad'">
+                    </form>
+                  {% endfor %}
+                </div>
+                <br>
+                <div class="row justify-content-center pr-3">
+                    <h2><b>Image Gallery</b></h2>
+                </div>
+                <div class="row">
+                    <div class="col-lg-4 col-md-12 mb-4">
+                        <a><img class="img-fluid z-depth-1" src="{{ url_for('static', filename='profile_pics/' + project.author.image_file) }}" data-toggle="modal" data-target="#modal1"></a>
+                    </div>
+                    <div class="col-lg-4 col-md-12 mb-4">
+                        <a><img class="img-fluid z-depth-1" src="{{ url_for('static', filename='profile_pics/' + project.author.image_file) }}" data-toggle="modal" data-target="#modal1"></a>
+                    </div>
+                    <div class="col-lg-4 col-md-12 mb-4">
+                        <a><img class="img-fluid z-depth-1" src="{{ url_for('static', filename='profile_pics/' + project.author.image_file) }}" data-toggle="modal" data-target="#modal1"></a>
+                    </div>
+                </div>
+            </div>
         </div>
-        {% endif %}
-      </div>
-      <h2 class="article-title">{{ project.title }}</h2>
-      <p class="article-content">{{ project.description }}</p>
+
+        <br>
     </div>
-  </article>
-  <!-- Modal -->
- <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
-   <div class="modal-dialog" role="document">
-     <div class="modal-content">
-       <div class="modal-header">
-         <h5 class="modal-title" id="deleteModalLabel">Delete Project?</h5>
-         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-           <span aria-hidden="true">&times;</span>
-         </button>
-       </div>
-       <div class="modal-footer">
-         <p>Are you sure you want to delete this project?</p>
-         <small>This action cannot be undone.</small>
-         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-         <form action="{{ url_for('delete_project', project_id=project.id) }}" method="POST">
-           <input class="btn btn-danger" type="submit" value="Delete">
-         </form>
-       </div>
-     </div>
-   </div>
- </div>
+
+</div>
 </div>
 {% endblock %}
