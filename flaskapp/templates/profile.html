@@ -13,14 +13,18 @@
                 <p class="text-secondary">{{ user.email }}</p>
               </div>
               <div class="col-auto-3">
+                {% if current_user.username==user.username %}
                 <a class="btn btn-outline-info" href="{{ url_for('update_profile') }}">Update Profile</a>
+                {% endif %}
               </div>
               <div class="col-auto"></div>
               <div class="col-auto-2">
-                <form action="{{url_for('delete_account')}}" method="POST">
-                  <input type="hidden" value={{user.email}} name="email"/>
-                  <input type="submit" value="Delete Account" class="btn btn-outline-danger" onclick="return confirm('Are you sure?');"/>
-                </form>
+                 {% if current_user.username==user.username %}
+                  <form action="{{url_for('delete_account')}}" method="POST">
+                    <input type="hidden" value={{user.email}} name="email"/>
+                    <input type="submit" value="Delete Account" class="btn btn-outline-danger" onclick="return confirm('Are you sure?');"/>
+                  </form>
+                 {% endif %}
               </div>
             </div>
             <hr>
@@ -31,12 +35,34 @@
               {% if user.technology %} <span class="badge badge-success">Technology</span>{% endif %}
               {% if user.art %} <span class="badge badge-warning">Art</span>{% endif %}
               {% if user.music %} <span class="badge badge-danger">Music</span>{% endif %}
-
               <br><br>
               <span class="badge">Description:</span>
               <textarea class="form-control" readonly>{% if user.description %}{{ user.description }}{% endif %}</textarea>
             </div>
 
+            <div class="user-projects">
+              <h2>Projects</h2>
+
+              {% if projects %}
+              {% for project in projects %}
+              <article class="media content-section col-lg-6">
+                <img class="rounded-circle article-img"
+                  src="{{ url_for('static', filename='profile_pics/' + project.author.image_file) }}"
+                  alt="'static', filename='profile_pics/default.jpg') ">
+                <div class="media-body">
+                  <div class="article-metadata">
+                    <a class="mr-2" href="{{ url_for('profile', username= project.author.username) }}">{{ project.author.username }}</a>
+                    <small class="text-muted">{{ project.date_posted.strftime("%m/%d/%Y, %I:%M%p") }}</small>
+                  </div>
+                  <h4><a class="article-title" href="{{ url_for('project_detail_view', project_id=project.id) }}">{{ project.title }}</a></h4>
+                  <p class="article-content">{{ project.description }}</p>
+                </div>
+              </article>
+              {% endfor %}
+              {% else %}
+              <span>No projects to display.</span>
+              {% endif %}
+            </div>
           </div>
         </div>
 

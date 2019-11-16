@@ -15,13 +15,12 @@ class User(db.Model, UserMixin):
     email = db.Column(db.String(120), unique=True, nullable=False)
     image_file = db.Column(db.String(20), nullable=False, default='default.jpg')
     password = db.Column(db.String(60), nullable=False)
-    description = db.Column(db.String(256), nullable=True)
+    description = db.Column(db.String(1000), nullable=True)
     business=db.Column(db.Boolean,default=False)
     technology=db.Column(db.Boolean,default=False)
     art=db.Column(db.Boolean,default=False)
     music=db.Column(db.Boolean,default=False)
     literature=db.Column(db.Boolean,default=False)
-
     projects = db.relationship('Project', backref='author', lazy=True)
 
     def __repr__(self):
@@ -35,7 +34,6 @@ class Project(db.Model):
     date_posted = db.Column(db.DateTime, nullable=False, default=time)
     description = db.Column(db.Text, nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-
     def __repr__(self):
         return f"Project('{self.title}', '{self.date_posted}', '{self.id}', '{self.user_id}')"
 

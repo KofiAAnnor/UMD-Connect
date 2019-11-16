@@ -22,19 +22,22 @@
             <div class="form-group">
                 {{ form.submit(class="btn btn-outline-info") }}
             </div>
-            <div class="form-group">
-            {% if user %}
+            {% for user in user%}
                 Name: {{user.username}} <br>
                 Email: {{user.email}}<br>
                 About: {{user.description}}<br>
                 Skills:
-                {% if skillTags.BusinessTag != None %} <span class="badge badge-primary">Business</span>{% endif %}
-                {% if skillTags.LiteratureTag != None %} <span class="badge badge-info">Literature</span>{% endif %}
-                {% if skillTags.TechnologyTag != None %} <span class="badge badge-success">Technology</span>{% endif %}
-                {% if skillTags.ArtTag != None %} <span class="badge badge-warning">Art</span>{% endif %}
-                {% if skillTags.MusicTag != None %} <span class="badge badge-danger">Music</span>{% endif %}
-            {% endif %}
-            </div>
+                {% if user.business %} <span class="badge badge-primary">Business</span>{% endif %}
+                {% if user.literature %} <span class="badge badge-info">Literature</span>{% endif %}
+                {% if user.technology %} <span class="badge badge-success">Technology</span>{% endif %}
+                {% if user.art %} <span class="badge badge-warning">Art</span>{% endif %}
+                {% if user.music %} <span class="badge badge-danger">Music</span>{% endif %}<hr><br>
+            {% endfor %}
+             {% for project in projects %}
+                Title: {{project.title}} <br>
+                Time: {{project.time}}<br>
+                Description: {{project.description}}<br>
+            {% endfor %}
         </form>
     </div>
 {% endblock content %}

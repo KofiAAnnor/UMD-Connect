@@ -7,7 +7,6 @@ from flaskapp.models import User, Project, Business, Technology, Literature, Art
 from flask_login import login_user, current_user, logout_user, login_required
 from PIL import Image
 
-
 @app.route("/")
 @app.route("/home")
 @login_required
@@ -31,7 +30,7 @@ def register():
         db.session.add(user)
         db.session.commit()
 
-        flash(f'Your account has been created! Please log in.', 'success')
+        flash(f'Your account has been created!', 'success')
         return redirect(url_for('login'))
 
     return render_template('register.html', title="Register", form=form)
@@ -66,6 +65,8 @@ def logout():
 def profile(username):
     user = User.query.filter_by(username=username).first_or_404()
     image_file = url_for('static', filename='profile_pics/' + user.image_file)
+    projects = Project.query.filter(Project.user_id == user.id).all()
+
     """tags = {
         "BusinessTag": Business.query.filter_by(name=user.username).first(),
         "LiteratureTag": Literature.query.filter_by(name=user.username).first(),
@@ -76,7 +77,7 @@ def profile(username):
     """
 
     return render_template('profile.html', title=user.username+'\'s Profile',
-                            user=user, image_file=image_file)
+                            user=user, image_file=image_file, projects=projects)
 
 
 @app.route("/delete_account", methods=["POST"])
@@ -251,20 +252,50 @@ def delete_project(project_id):
 
 
 @app.route("/search", methods=["POST", 'GET'])
+@login_required
 def search():
-    # todo - when username no input, search by skills, list all user with those skills
-    # todo - display their project also
     form=SearchForm()
-    user=User.query.filter_by(username=form.name.data).first()
-    project=Project.query.filter_by(user_id=form.name.data).first()
-    tags = {
-        "BusinessTag": Business.query.filter_by(name=form.name.data).first(),
-        "LiteratureTag": Literature.query.filter_by(name=form.name.data).first(),
-         "TechnologyTag": Technology.query.filter_by(name=form.name.data).first(),
-        "ArtTag": Art.query.filter_by(name=form.name.data).first(),
-        "MusicTag": Music.query.filter_by(name=form.name.data).first(),
-    }
-    if form.type.data=="User":
-        return render_template('search.html', title='Search', form=form,user=user,skillTags=tags)
-    else:
-        return render_template('search.html', title='Search', form=form, user=project,skillTags=tags)
+    if form.is_submitted():
+        if form.name.data:
+            if form.type.data=="User":
+                user=User.query.filter_by(username=form.name.data).first()
+                if form.type.data=="User" and user:
+                    return render_template('search.html', title='Search', form=form,user={user})
+            else:
+                project=Project.query.filter_by(title=form.name.data).first()
+                if project:
+                    return render_template('search.html', title='Search', form=form, projects={project})
+        elif form.skills_tech.data or form.skills_lit.data or form.skills_art.data or \
+                form.skills_bus.data or form.skills_music.data:
+            if form.type.data=="User":
+                users=[]
+                if form.skills_bus.data:
+                    u=User.query.filter_by(business=form.skills_bus.data).all()
+                    for us in u:
+                        users.append(us)
+                if form.skills_tech.data:
+                    u=User.query.filter_by(technology=form.skills_tech.data).all()
+                    for us in u:
+                        if us not in users:
+                            users.append(us)
+                if form.skills_lit.data:
+                    u=User.query.filter_by(literature=form.skills_lit.data).all()
+                    for us in u:
+                        if us not in users:
+                            users.append(us)
+                if form.skills_art.data:
+                    u=User.query.filter_by(art=form.skills_art.data).all()
+                    for us in u:
+                        if us not in users:
+                            users.append(us)
+                if form.skills_music.data:
+                    u = User.query.filter_by(music=form.skills_music.data).all()
+                    for us in u:
+                        if us not in users:
+                            users.append(us)
+                return render_template('search.html',title='Search',form=form,user=users)
+            else: #projects has no skill field yet
+                projects=[]
+                return render_template('search.html', title='Search', form=form, projects=projects)
+
+    return render_template('search.html', title='Search', form=form)

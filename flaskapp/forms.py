@@ -81,7 +81,7 @@ class UpdateForm(FlaskForm):
             raise ValidationError('Incorrect password.')
 
 class SearchForm(FlaskForm):
-    name=StringField("Name", validators=[Length(min=2,max=20)])
+    name=StringField("Name", validators=[Length(min=2,max=20),Optional()])
     type=RadioField ("Type", choices=[('User','User'),('Project','Project')],validators=[DataRequired()] ,default="User")
     skills_bus = BooleanField('Business')
     skills_lit = BooleanField('Literature')
