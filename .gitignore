@@ -15,4 +15,3 @@ build/
 *.csv
 .vscode/
 *.db
-flaskapp/site.db
