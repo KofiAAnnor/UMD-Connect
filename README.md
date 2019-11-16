@@ -2,7 +2,19 @@
 
 Final semester project for CMSC435 Fall 2019.
 
-# Installing the application
+## Running the application (Docker)
+
+*Note*: These steps assume you have docker and docker-compose installed.
+
+Run the app with ```docker-compose```
+
+    $ docker-compose up
+
+To rebuild the application before running
+
+    $ docker-compose up --build
+
+## Installing the application (Local only)
 
 1. Create your virtual environment.
 
@@ -15,7 +27,7 @@ Final semester project for CMSC435 Fall 2019.
 
         $ pip install -r requirements.txt
 
-# Running the application
+## Running the application (Local only)
 
 To run the application in development mode:
 
@@ -27,7 +39,7 @@ To run the application in development mode:
   FLASK_APP and FLASK_ENV.
 
 
-# Updating the requirements.txt file
+## Updating the requirements.txt file
 
 After using pip to install some new dependencies on your local environment, the
 requirements.txt file needs to be updated before you commit your code, or your
