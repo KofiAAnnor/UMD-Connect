@@ -30,7 +30,7 @@ def register():
         db.session.add(user)
         db.session.commit()
 
-        flash(f'Your account has been created! Please log in.', 'success')
+        flash(f'Your account has been created!', 'success')
         return redirect(url_for('login'))
 
     return render_template('register.html', title="Register", form=form)
@@ -65,6 +65,8 @@ def logout():
 def profile(username):
     user = User.query.filter_by(username=username).first_or_404()
     image_file = url_for('static', filename='profile_pics/' + user.image_file)
+    projects = Project.query.filter(Project.user_id == user.id).all()
+
     """tags = {
         "BusinessTag": Business.query.filter_by(name=user.username).first(),
         "LiteratureTag": Literature.query.filter_by(name=user.username).first(),
@@ -75,7 +77,7 @@ def profile(username):
     """
 
     return render_template('profile.html', title=user.username+'\'s Profile',
-                            user=user, image_file=image_file)
+                            user=user, image_file=image_file, projects=projects)
 
 
 @app.route("/delete_account", methods=["POST"])

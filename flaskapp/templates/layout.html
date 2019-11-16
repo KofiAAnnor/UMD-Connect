@@ -9,11 +9,11 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}" >
 
-    <title>UMD Connect
     {% if title %}
-      - {{ title }}
+    <title>{{ title }} - UMD Connect</title>
+    {% else %}
+    <title>Welcome to UMD Connect</title>
     {% endif %}
-    </title>
   </head>
   <body class="bg-light">
     <header class="site-header">
