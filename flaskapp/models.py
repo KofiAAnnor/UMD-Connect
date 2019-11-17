@@ -62,3 +62,12 @@ class ProjectMessages(db.Model):
 
     def __repr__(self):
         return f"ProjectMessages('{self.user_id}', '{self.project_id}')"
+
+class ProjectImages(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    project_id = db.Column(db.Integer,db.ForeignKey('project.id'), nullable=False)
+    image_file = db.Column(db.String(20), nullable=False, default='default.jpg')
+
+
+    def __repr__(self):
+        return f"ProjectMessages('{self.project_id}', '{self.image_file}')"

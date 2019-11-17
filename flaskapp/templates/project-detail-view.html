@@ -55,15 +55,11 @@
                     <h2><b>Image Gallery</b></h2>
                 </div>
                 <div class="row">
-                    <div class="col-lg-4 col-md-12 mb-4">
-                        <a><img class="img-fluid z-depth-1" src="{{ url_for('static', filename='profile_pics/' + project.author.image_file) }}" data-toggle="modal" data-target="#modal1"></a>
+                    {% for images in project_image_gallery%}
+                     <div class="col-lg-4 col-md-12 mb-4">
+                        <a><img class="img-fluid z-depth-1" src={{images}} data-toggle="modal" data-target="#modal1"></a>
                     </div>
-                    <div class="col-lg-4 col-md-12 mb-4">
-                        <a><img class="img-fluid z-depth-1" src="{{ url_for('static', filename='profile_pics/' + project.author.image_file) }}" data-toggle="modal" data-target="#modal1"></a>
-                    </div>
-                    <div class="col-lg-4 col-md-12 mb-4">
-                        <a><img class="img-fluid z-depth-1" src="{{ url_for('static', filename='profile_pics/' + project.author.image_file) }}" data-toggle="modal" data-target="#modal1"></a>
-                    </div>
+                    {% endfor %}
                 </div>
             </div>
         </div>
