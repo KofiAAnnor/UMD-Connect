@@ -32,11 +32,31 @@
                 {% endif %}
             </div>
             <div class="form-group" data-toggle="buttons">
-                <input id ="business" name ="business"type="checkbox" data-size="small" checked data-toggle="toggle" data-on="Business" data-off="Business"data-onstyle="success" >
-                <input id ="technology" name ="technology"type="checkbox" data-size="small" checked data-toggle="toggle" data-on="Technology" data-off="Technology"data-onstyle="success" >
-                <input id ="art" name ="art"type="checkbox" data-size="small" checked data-toggle="toggle" data-on="Art" data-off="Art"data-onstyle="success" >
-                <input id ="music" name ="music"type="checkbox" data-size="small" checked data-toggle="toggle" data-on="Music" data-off="Music"data-onstyle="success" >
-                <input id ="literature" name ="literature"type="checkbox" data-size="small" checked data-toggle="toggle" data-on="Literature" data-off="Literature"data-onstyle="success" >
+                {% if project.business %}
+                    <input id ="business" name ="business"type="checkbox" data-size="small" checked data-toggle="toggle" data-on="Business" data-off="Business"data-onstyle="success" >
+                {% else %}
+                    <input id ="business" name ="business"type="checkbox" data-size="small" data-toggle="toggle" data-on="Business" data-off="Business"data-onstyle="success" >
+                {% endif %}
+                {% if project.technology %}
+                    <input id ="technology" name ="technology"type="checkbox" data-size="small" checked data-toggle="toggle" data-on="Technology" data-off="Technology"data-onstyle="success" >
+                {% else %}
+                    <input id ="technology" name ="technology"type="checkbox" data-size="small" data-toggle="toggle" data-on="Technology" data-off="Technology"data-onstyle="success" >
+                {% endif %}
+                {% if project.art %}
+                    <input id ="art" name ="art"type="checkbox" data-size="small" checked data-toggle="toggle" data-on="Art" data-off="Art"data-onstyle="success" >
+                {% else %}
+                    <input id ="art" name ="art"type="checkbox" data-size="small"  data-toggle="toggle" data-on="Art" data-off="Art"data-onstyle="success" >
+                {% endif %}
+                {% if project.music %}
+                    <input id ="music" name ="music"type="checkbox" data-size="small" checked data-toggle="toggle" data-on="Music" data-off="Music"data-onstyle="success" >
+                {% else %}
+                    <input id ="music" name ="music"type="checkbox" data-size="small" data-toggle="toggle" data-on="Music" data-off="Music"data-onstyle="success" >
+                {% endif %}
+                {% if project.literature %}
+                    <input id ="literature" name ="literature"type="checkbox" data-size="small" checked data-toggle="toggle" data-on="Literature" data-off="Literature"data-onstyle="success" >
+                {% else %}
+                    <input id ="literature" name ="literature"type="checkbox" data-size="small" data-toggle="toggle" data-on="Literature" data-off="Literature"data-onstyle="success" >
+                {% endif %}
             </div>
             <div class="form-group" data-toggle="buttons">
                 <input id ="projectStatus" name ="projectStatus"type="checkbox" data-size="small" checked data-toggle="toggle" data-on="Open" data-off="Closed"data-onstyle="success" >

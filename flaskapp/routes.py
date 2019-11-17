@@ -208,7 +208,7 @@ def new_project():
 
         return redirect(url_for('project_detail_view', project_id=project.id))
     return render_template('project.html', title='New Project', form=form,
-                                legend='New Project')
+                                legend='New Project',project={})
 
 
 @app.route("/project/<int:project_id>")
@@ -258,7 +258,7 @@ def update_project(project_id):
         form.description.data = project.description
 
     return render_template('project.html', title='Update Project', form=form,
-                            legend='Update Project')
+                            legend='Update Project',project=project)
 
 
 @app.route("/project/<int:project_id>/delete", methods=['POST'])
