@@ -319,6 +319,30 @@ def search():
                 return render_template('search.html',title='Search',form=form,user=users)
             else: #projects has no skill field yet
                 projects=[]
+                if form.skills_bus.data:
+                    ps=Project.query.filter_by(business=form.skills_bus.data).all()
+                    for p in ps:
+                        projects.append(p)
+                if form.skills_tech.data:
+                    ps=Project.query.filter_by(technology=form.skills_tech.data).all()
+                    for p in ps:
+                        if p not in projects:
+                            projects.append(p)
+                if form.skills_lit.data:
+                    ps=Project.query.filter_by(literature=form.skills_lit.data).all()
+                    for p in ps:
+                        if p not in projects:
+                            projects.append(p)
+                if form.skills_art.data:
+                    ps=Project.query.filter_by(art=form.skills_art.data).all()
+                    for p in ps:
+                        if p not in projects:
+                            projects.append(p)
+                if form.skills_music.data:
+                    ps = Project.query.filter_by(music=form.skills_music.data).all()
+                    for p in ps:
+                        if p not in projects:
+                            projects.append(p)
                 return render_template('search.html', title='Search', form=form, projects=projects)
 
     return render_template('search.html', title='Search', form=form)

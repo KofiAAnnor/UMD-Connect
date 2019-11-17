@@ -35,8 +35,14 @@
             {% endfor %}
              {% for project in projects %}
                 Title: {{project.title}} <br>
-                Time: {{project.time}}<br>
-                Description: {{project.description}}<br>
+                Time: {{project.date_posted.strftime("%m/%d/%Y, %I:%M%p")}}<br>
+                Looking for:
+                {% if project.business %} <span class="badge badge-primary">Business</span>{% endif %}
+                {% if project.literature %} <span class="badge badge-info">Literature</span>{% endif %}
+                {% if project.technology %} <span class="badge badge-success">Technology</span>{% endif %}
+                {% if project.art %} <span class="badge badge-warning">Art</span>{% endif %}
+                {% if project.music %} <span class="badge badge-danger">Music</span>{% endif %}<br>
+                Description: {{project.description}}<hr><br>
             {% endfor %}
         </form>
     </div>
