@@ -3,7 +3,7 @@ import secrets
 from flask import render_template, url_for, flash, redirect, request, abort
 from flaskapp import app, db, bcrypt
 from flaskapp.forms import RegistrationForm, LoginForm, UpdateForm, SearchForm, NewProjectForm
-from flaskapp.models import User, Project, ProjectMembers
+from flaskapp.models import User, Project, ProjectMembers, ProjectImages
 from flask_login import login_user, current_user, logout_user, login_required
 from PIL import Image
 
@@ -221,8 +221,14 @@ def project_detail_view(project_id):
     for x in members_query:
         name = User.query.filter_by(id=x.user_id).first().username
         project_members.append(name)
+    project_image_gallery = []
+    gallery_images = ProjectImages.query.filter_by(project_id=project_id)
+    if gallery_images is not None:
+        for images in gallery_images:
+            project_image_gallery.append(url_for('static', filename='profile_pics/' + images.image_file))
 
-    return render_template('project-detail-view.html', title='Project Detail', project=project, members=project_members, user=user)
+    return render_template('project-detail-view.html', title='Project Detail', project=project, members=project_members, user=user,
+                           project_image_gallery=project_image_gallery)
 
 
 @app.route("/project/<int:project_id>/update", methods=['GET', 'POST'])
@@ -343,3 +349,19 @@ def add_project_members():
     else:
         return render_template('add-project-members.html', title='Profile', id=request.form["projectId"])
 
+
+@app.route("/user/add-project-gallery-image", methods=["POST", 'GET'])
+@login_required
+def add_project_image():
+    form = UpdateForm()
+    user = User.query.filter_by(email=current_user.email).first()
+    if form.picture.data:
+        picture_file = save_picture(form.picture.data)
+        image_entry = ProjectImages(image_file=picture_file, project_id=request.form["projectId"])
+        db.session.add(image_entry)
+        db.session.commit()
+        flash(f'Image has been added.', 'success')
+        return redirect(url_for('profile', username=current_user.username))
+
+    image_file = url_for('static', filename='profile_pics/' + current_user.image_file)
+    return render_template('add-project-gallery-image.html', title='Update Profile', form=form, image_file=image_file, id=request.form["projectId"])
