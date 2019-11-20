@@ -3,7 +3,7 @@ import secrets
 from flask import render_template, url_for, flash, redirect, request, abort
 from flaskapp import app, db, bcrypt
 from flaskapp.forms import RegistrationForm, LoginForm, UpdateForm, SearchForm, NewProjectForm
-from flaskapp.models import User, Project, ProjectMembers, ProjectImages
+from flaskapp.models import User, Project, ProjectMembers, ProjectImages, ProjectMessages
 from flask_login import login_user, current_user, logout_user, login_required
 from PIL import Image
 
@@ -389,3 +389,44 @@ def add_project_image():
 
     image_file = url_for('static', filename='profile_pics/' + current_user.image_file)
     return render_template('add-project-gallery-image.html', title='Update Profile', form=form, image_file=image_file, id=request.form["projectId"])
+
+@app.route("/user/project-messages-page", methods=["POST", 'GET'])
+@login_required
+def project_messages_page():
+    message_cards=[]
+    if request.method != 'POST':
+        return render_template('project-messages-page.html', title='Update Profile', id=request.form["projectId"])
+    if request.form['submit_button'] == "Messages":
+        messages = ProjectMessages.query.filter_by(project_id=request.form["projectId"])
+        for m in messages:
+            user = User.query.filter_by(id=m.user_id).first()
+            mc = message_card(user.username, user.image_file, m.message, m.date_posted)
+            message_cards.append(mc)
+        return render_template('project-messages-page.html', title='Update Profile', messages=reversed(message_cards), id=request.form["projectId"])
+    if request.form['submit_button'] == "submit":
+        message = ProjectMessages( user_id = current_user.id, project_id = request.form["projectId"], message = request.form["msg"])
+        db.session.add(message)
+        db.session.commit()
+    if request.form['submit_button'] == "refresh":
+        messages = ProjectMessages.query.filter_by(project_id=request.form["projectId"])
+        for m in messages:
+            user = User.query.filter_by(id=m.user_id).first()
+            mc = message_card(user.username, user.image_file, m.message, m.date_posted)
+            message_cards.append(mc)
+        return render_template('project-messages-page.html', title='Update Profile', messages=reversed(message_cards),
+                               id=request.form["projectId"])
+
+    messages = ProjectMessages.query.filter_by(project_id=request.form["projectId"])
+    for m in messages:
+        user = User.query.filter_by(id=m.user_id).first()
+        mc = message_card(user.username, user.image_file, m.message, m.date_posted)
+        message_cards.append(mc)
+    return render_template('project-messages-page.html', title='Update Profile', messages=reversed(message_cards),  id=request.form["projectId"])
+
+
+class message_card:
+  def __init__(self, username, userimage, message, timestamp, ):
+    self.username = username
+    self.userimage = userimage
+    self.message = message
+    self.timestamp = timestamp

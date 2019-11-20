@@ -72,6 +72,10 @@
                   <input type="hidden" value={{item.id}} name="projectId"/>
                   <input type="submit" name ="submit_button" value="Add Members" class="btn btn-outline-info  btn-sm"/>
                 </form>
+                 <form action="{{url_for('project_messages_page')}}" method="POST" style="padding-right: 10px">
+                  <input type="hidden" value={{item.id}} name="projectId"/>
+                  <input type="submit" name ="submit_button" value="Messages" class="btn btn-outline-dark  btn-sm"/>
+                </form>
 
                 <form action="{{url_for('add_project_image', projectid=item.id)}}" method="POST" style="padding-right: 10px">
                   <input type="hidden" value={{item.id}} name="projectId"/>
@@ -139,10 +143,17 @@
         <div class="col-auto-3">
           <nobr>
             <div class="btn-group" style="width:100%">
-              <form action="{{url_for('project_detail_view',project_id =item.id)}}" method="">
+              <form action="{{url_for('project_detail_view',project_id =item.id)}}" method="" style="padding-right: 10px">
                 <input type="hidden" value={{item.id}} name="projectId"/>
                 <input type="submit"  name ="submit_button" value="View" class="btn btn-outline-success  btn-sm"/>
               </form>
+                          {% if current_user.username==user.username %}
+
+               <form action="{{url_for('project_messages_page')}}" method="POST" style="padding-right: 10px">
+                  <input type="hidden" value={{item.id}} name="projectId"/>
+                  <input type="submit" name ="submit_button" value="Messages" class="btn btn-outline-dark  btn-sm"/>
+                </form>
+              {%endif%}
             </div>
           </nobr>
         </div>     <br>

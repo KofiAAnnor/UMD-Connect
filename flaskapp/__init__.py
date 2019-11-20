@@ -4,6 +4,7 @@ from flask_bcrypt import Bcrypt
 from flask_login import LoginManager
 
 
+
 app = Flask(__name__)
 
 app.config['SECRET_KEY'] = '22d6a8cc268a1deffba6bdbfb1b9966b'
@@ -19,6 +20,7 @@ login_manager.login_message_category = 'info'
 
 from flaskapp import routes
 from flaskapp.models import User
+
 
 db.drop_all()
 db.create_all()
