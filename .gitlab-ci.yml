@@ -1,0 +1,28 @@
+stages:
+  - build
+  - test
+  - deploy
+
+build:
+  type: build
+  script: echo 'Build script executes.'
+
+test:
+  image: python:3.6
+  type: test
+  retry: 2
+  environment:
+    name: development
+  script:
+    - pip install -r requirements.txt
+    - python run_tests.py
+  except:
+    - master
+
+deploy:
+  type: deploy
+  environment: production
+  script: echo 'Deploy script executes.'
+  only:
+    - master
+  when: manual
