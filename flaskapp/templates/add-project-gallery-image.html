@@ -1,0 +1,29 @@
+{% extends "layout.html" %}
+{% block content %}
+  <div class="content-section">
+    <form method="POST" enctype="multipart/form-data">
+
+      <fieldset class="form-group">
+         <!-- Title -->
+        <legend class="border-bottom mb-4"><b>Add Project Image</b></legend>
+
+        <!-- Profile Picture -->
+        <div class="form-group">
+          {{ form.picture(type="file", class="form-control-file") }}
+
+          {% if form.picture.errors %}
+            {% for error in form.picture.errors %}
+              <span class="text-danger">{{ error }}</span><br>
+            {% endfor %}
+          {% endif %}
+        </div>
+      </fieldset>
+
+      <!-- Submit -->
+      <div class="form-group">
+          <input type="hidden" value={{id}} name="projectId"/>
+          {{ form.submit(class="btn btn-outline-info") }}
+      </div>
+    </form>
+  </div>
+{% endblock content %}

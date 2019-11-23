@@ -1,0 +1,74 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="content-section">
+    <form method="POST" action="">
+        {{ form.hidden_tag() }}
+        <fieldset class="form-group">
+            <legend class="border-bottom mb-4">{{ legend }}</legend>
+            <div class="form-group">
+                {{ form.title.label(class="form-control-label") }}
+                {% if form.title.errors %}
+                {{ form.title(class="form-control form-control-lg is-invalid") }}
+                <div class="invalid-feedback">
+                    {% for error in form.title.errors %}
+                    <span>{{ error }}</span>
+                    {% endfor %}
+                </div>
+                {% else %}
+                {{ form.title(class="form-control form-control-lg") }}
+                {% endif %}
+            </div>
+            <div class="form-group">
+                {{ form.description.label(class="form-control-label") }}
+                {% if form.description.errors %}
+                {{ form.description(class="form-control form-control-lg is-invalid") }}
+                <div class="invalid-feedback">
+                    {% for error in form.description.errors %}
+                    <span>{{ error }}</span>
+                    {% endfor %}
+                </div>
+                {% else %}
+                {{ form.description(class="form-control form-control-lg") }}
+                {% endif %}
+            </div>
+            <div class="form-group" data-toggle="buttons">
+                {% if project.business %}
+                    <input id ="business" name ="business"type="checkbox" data-size="small" checked data-toggle="toggle" data-on="Business" data-off="Business"data-onstyle="success" >
+                {% else %}
+                    <input id ="business" name ="business"type="checkbox" data-size="small" data-toggle="toggle" data-on="Business" data-off="Business"data-onstyle="success" >
+                {% endif %}
+                {% if project.technology %}
+                    <input id ="technology" name ="technology"type="checkbox" data-size="small" checked data-toggle="toggle" data-on="Technology" data-off="Technology"data-onstyle="success" >
+                {% else %}
+                    <input id ="technology" name ="technology"type="checkbox" data-size="small" data-toggle="toggle" data-on="Technology" data-off="Technology"data-onstyle="success" >
+                {% endif %}
+                {% if project.art %}
+                    <input id ="art" name ="art"type="checkbox" data-size="small" checked data-toggle="toggle" data-on="Art" data-off="Art"data-onstyle="success" >
+                {% else %}
+                    <input id ="art" name ="art"type="checkbox" data-size="small"  data-toggle="toggle" data-on="Art" data-off="Art"data-onstyle="success" >
+                {% endif %}
+                {% if project.music %}
+                    <input id ="music" name ="music"type="checkbox" data-size="small" checked data-toggle="toggle" data-on="Music" data-off="Music"data-onstyle="success" >
+                {% else %}
+                    <input id ="music" name ="music"type="checkbox" data-size="small" data-toggle="toggle" data-on="Music" data-off="Music"data-onstyle="success" >
+                {% endif %}
+                {% if project.literature %}
+                    <input id ="literature" name ="literature"type="checkbox" data-size="small" checked data-toggle="toggle" data-on="Literature" data-off="Literature"data-onstyle="success" >
+                {% else %}
+                    <input id ="literature" name ="literature"type="checkbox" data-size="small" data-toggle="toggle" data-on="Literature" data-off="Literature"data-onstyle="success" >
+                {% endif %}
+            </div>
+            <div class="form-group" data-toggle="buttons">
+                <input id ="projectStatus" name ="projectStatus"type="checkbox" data-size="small" checked data-toggle="toggle" data-on="Open" data-off="Closed"data-onstyle="success" >
+            </div>
+        </fieldset>
+        <div class="form-group">
+            {{ form.submit(class="btn btn-outline-info") }}
+        </div>
+    </form>
+    <small class="text-muted ml-2">
+        <a href="javascript:history.back()">Cancel</a>
+    </small>
+
+</div>
+{% endblock content %}

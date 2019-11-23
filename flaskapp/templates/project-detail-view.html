@@ -1,0 +1,72 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="container">
+    <div class="content-section">
+        <div class="media">
+ <img class="rounded-circle article-img"
+      src="{{ url_for('static', filename='profile_pics/' + project.author.image_file) }}"
+      alt="'static', filename='profile_pics/default.jpg') ">            <div class="media-body">
+                <div class="row justify-content-center pr-3">
+                    <h1 class="account-heading"><b>{{ project.title }}</b></h1>
+                </div>
+                <br>
+                <div class="row justify-content-center pr-3">
+                    <div class="col">
+                        <span  class="badge badge-dark">Owner: </span> @{{ user.username}}
+                    </div>
+                    <div class="col">
+                        <span class="badge badge-dark">Status:</span> {{ project.status }}
+                    </div>
+                    <div class="col">
+                        <span class="badge badge-dark">Email:</span> {{ user.email }}
+                    </div>
+                </div>
+                <hr>
+                <div>
+                    <span class="badge badge-dark">Looking For:</span>
+                     {% if project.business == True%}
+                    <span class="badge badge-primary">Business</span>
+                    {% endif %}
+                    {% if project.literature == True%}
+                    <span class="badge badge-info">Literature</span>
+                    {% endif %}
+                    {% if project.technology == True%}
+                    <span class="badge badge-success">Technology</span>
+                    {% endif %}
+                    {% if project.art == True%}
+                    <span class="badge badge-warning">Art</span>
+                    {% endif %}
+                    {% if project.music == True%}
+                    <span class="badge badge-danger">Music</span>
+                    {% endif %}
+                    <br><br>
+                    <span class="badge badge-dark">Description:</span>
+                    <p>{{ project.description }}</p>
+                  <h4 style="display: inline"> <span class="badge badge-dark">Project Members:</span></h4>
+                  {% for m in members%}
+                  <form  action="{{url_for('profile', username=m)}}" method="" style ="display: inline">
+                        <input type="submit" name ="submit_button" value="{{m}}" class=" btn-sm" style="background-color: #aaa9ad" onmouseover="this.style.backgroundColor='#006db9'" onmouseout="this.style.backgroundColor='#aaa9ad'">
+                    </form>
+                  {% endfor %}
+                </div>
+                <br>
+                <div class="row justify-content-center pr-3">
+                    <h2><b>Image Gallery</b></h2>
+                </div>
+                <div class="row">
+                    {% for images in project_image_gallery%}
+                     <div class="col-lg-4 col-md-12 mb-4">
+                        <a><img class="img-fluid z-depth-1" src={{images}} data-toggle="modal" data-target="#modal1"></a>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <br>
+    </div>
+
+</div>
+</div>
+{% endblock %}
