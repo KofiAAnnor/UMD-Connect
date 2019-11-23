@@ -2,18 +2,74 @@
 
 {% block content %}
 <div class="container">
-  <article class="media content-section">
-    <img class="rounded-circle article-img"
-      src="{{ url_for('static', filename='profile_pics/' + project.author.image_file) }}"
-      alt="'static', filename='profile_pics/default.jpg') ">
-    <div class="media-body">
-      <div class="article-metadata">
-        <a class="mr-2" href="{{ url_for('profile', username=project.author.username) }}">{{ project.author.username }}</a>
-        <small class="text-muted">{{ project.date_posted.strftime("%m/%d/%Y, %I:%M%p") }}</small>
-        {% if project.author == current_user %}
-        <div>
-          <a class="btn btn-secondary btn-sm m-1" href="{{ url_for('update_project', project_id=project.id) }}">Update</a>
-          <button type="button" class="btn btn-danger btn-sm m-1" data-toggle="modal" data-target="#deleteModal">Delete</button>
+    <div class="content-section">
+        <div class="media">
+          <img class="rounded-circle article-img mt-3 ml-2"
+          src="{{ url_for('static', filename='profile_pics/' + project.author.image_file) }}"
+          alt="'static', filename='profile_pics/default.jpg') ">
+              <div class="media-body">
+                <div class="row justify-content-center pr-3">
+                    <h1 class="account-heading"><u><b>{{ project.title }}</b></u></h1>
+                </div>
+                <br>
+                <div class="row justify-content-center pr-3">
+                    <div class="col-auto">
+                          <span class="badge badge-info">Owner: </span> @{{ user.username}}
+                    </div>
+                    <div class="col-auto">
+                        <span class="badge badge-info">Status:</span> {{ project.status }}
+                    </div>
+                    <div class="col-auto">
+                        <span class="badge badge-info">Email:</span> {{ user.email }}
+                    </div>
+                </div>
+
+                <hr>
+
+                <div>
+                    <div class="row align-items-start">
+                        <span class="badge col-auto mr-2">Description:</span>
+                        <p class="bg-light py-1 px-3 rounded">{{ project.description }}</p>
+                    </div>
+                    <div class="row align-items-start">
+                        <span class="badge col-auto mr-1">Looking For:</span>
+                          {% if project.business == True%}
+                          <span class="badge badge-primary mx-1">Business</span>
+                          {% endif %}
+                          {% if project.literature == True%}
+                          <span class="badge badge-dark mx-1">Literature</span>
+                          {% endif %}
+                          {% if project.technology == True%}
+                          <span class="badge badge-success mx-1">Technology</span>
+                          {% endif %}
+                          {% if project.art == True%}
+                          <span class="badge badge-warning mx-1">Art</span>
+                          {% endif %}
+                          {% if project.music == True%}
+                          <span class="badge badge-danger mx-1">Music</span>
+                          {% endif %}
+                    </div>
+                    <div class="row"><p></p></div>
+                    <div class="row align-items-start">
+                        <span class="badge col-auto mr-1">Project Members:</span>
+                        {% for m in members%}
+                          <a class="btn btn-secondary btn-sm mx-2" href="{{url_for('profile', username=m)}}" role="button">{{m}}</a>
+                        {% endfor %}
+                    </div>
+                </div>
+                <br><hr>
+
+                <div class="row justify-content-center pr-3">
+                    <h2><b>Image Gallery</b></h2>
+                </div>
+                <div class="row">
+                    {% for images in project_image_gallery%}
+                     <div class="col-lg-4 col-md-12 mb-4">
+                        <a><img class="img-fluid z-depth-1" src={{images}} data-toggle="modal" data-target="#modal1"></a>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
         </div>
         {% endif %}
       </div>
