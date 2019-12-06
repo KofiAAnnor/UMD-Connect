@@ -74,10 +74,11 @@ def profile(username):
         proj_id = proj.project_id
         user_project = Project.query.filter_by(id=proj_id).first()
         if username == current_user.username:
-            if str(user_project.user_id) == str(current_user.get_id()):
-                user_personal_projects.append(user_project)
-            else:
-                user_collab_projects.append(user_project)
+            if user_project:
+                if str(user_project.user_id) == str(current_user.get_id()):
+                    user_personal_projects.append(user_project)
+                else:
+                    user_collab_projects.append(user_project)
         else:
             if str(user_project.user_id) == str(current_user.get_id()):
                 user_collab_projects.append(user_project)
