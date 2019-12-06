@@ -22,7 +22,7 @@ Code is store in the flaskapp directory,
 - routes.py: All route and function of the web
       
 
-*Hypothetical*
+*Hypothetical extension*
 
 - search page can redirect to project or user from the result
 
