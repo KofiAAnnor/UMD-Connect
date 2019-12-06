@@ -4,6 +4,23 @@ Final semester project for CMSC435 Fall 2019.
 
 * Milestone 2 commit: 8cf84440863541b334df589a171f70dc91bfbc1c
 
+## Developer Documentation
+
+*Software architecture*: Code is store in the flaskapp directory, 
+	web design is inside the teamplates directory under the same directory.
+
+__init__.py: Initialize the database and the app
+
+forms.py: The Form used in the app, including Registraion, Login, 
+         Update Profile, Search (user and project), Create Project.  
+
+modelts.py: The format for the User, Project, Project members,
+         Project message, Project images database.  
+
+
+
+
+
 ## Running the application (Docker)
 
 *Note*: These steps assume you have docker and docker-compose installed.
