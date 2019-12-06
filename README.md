@@ -6,25 +6,29 @@ Final semester project for CMSC435 Fall 2019.
 
 ## Developer Documentation
 
-*Software architecture*
+***Software architecture***
+
+- run.py: Use command [python run.py] to run the app locally.  
+
+- run_test.py: Contains unit test for the app.  
 
 Code is store in the flaskapp directory, 
-	web design is inside the teamplates directory under the same directory.
+	web design is inside the templates directory under the same directory.
 
-- __init__.py: Initialize the database and the app
+- \_\_init__.py: Initialize the database and the app
 
-- forms.py: All Form used in the app, including Registraion, Login, 
+- forms.py: All Forms used in the app, including Registraion, Login, 
          Update Profile, Search (user and project), Create Project.  
 
-- modelts.py: All format for the User, Project, Project members,
+- models.py: Format of the User, Project, Project members,
          Project message, Project images database.  
 
-- routes.py: All route and function of the web
+- routes.py: All routes and functions of the web
       
 
-*Hypothetical extension*
+***Hypothetical extension***
 
-- search page can redirect to project or user from the result
+- search page can redirect to project or user detail from the result
 
 - show new message automatically without press the refresh button
 
