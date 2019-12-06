@@ -6,18 +6,29 @@ Final semester project for CMSC435 Fall 2019.
 
 ## Developer Documentation
 
-*Software architecture*: Code is store in the flaskapp directory, 
+*Software architecture*
+
+Code is store in the flaskapp directory, 
 	web design is inside the teamplates directory under the same directory.
 
-__init__.py: Initialize the database and the app
+- __init__.py: Initialize the database and the app
 
-forms.py: The Form used in the app, including Registraion, Login, 
+- forms.py: All Form used in the app, including Registraion, Login, 
          Update Profile, Search (user and project), Create Project.  
 
-modelts.py: The format for the User, Project, Project members,
+- modelts.py: All format for the User, Project, Project members,
          Project message, Project images database.  
 
+- routes.py: All route and function of the web
+      
 
+*Hypothetical*
+
+- search page can redirect to project or user from the result
+
+- show new message automatically without press the refresh button
+
+- notification when there is new message
 
 
 
