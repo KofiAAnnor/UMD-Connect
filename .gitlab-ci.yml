@@ -19,10 +19,35 @@ test:
   except:
     - master
 
-deploy:
+test_dev:
+  image: python:3.6
+  type: test
+  retry: 2
+  environment:
+    name: development
+  script:
+    - pip install -r requirements.txt
+    - python run_tests.py
+  only:
+    - develop
+  tags:
+    - dev-gitlab-runner
+
+
+deploy_prod:
   type: deploy
-  environment: production
-  script: echo 'Deploy script executes.'
+  variables:
+    PROJECT_ENV: production
+  environment:
+    name: production
+  script:
+    - bash .prod-gitlab-deploy.sh
+    - eb init team-assignment-3 -p docker -r us-east-1
+    - eb use TeamAssignment3-env
+    - eb deploy TeamAssignment3-env -l te3-$CI_COMMIT_SHA
   only:
     - master
-  when: manual
+  when:
+    - manual
+  tags:
+    - prod-gitlab-runner
