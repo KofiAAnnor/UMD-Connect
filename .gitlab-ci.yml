@@ -6,18 +6,8 @@ stages:
 build:
   type: build
   script: echo 'Build script executes.'
-
-test:
-  image: python:3.6
-  type: test
-  retry: 2
-  environment:
-    name: development
-  script:
-    - pip install -r requirements.txt
-    - python run_tests.py
-  except:
-    - master
+  tags:
+    - dev-gitlab-runner
 
 test_dev:
   image: python:3.6
@@ -28,8 +18,8 @@ test_dev:
   script:
     - pip install -r requirements.txt
     - python run_tests.py
-  only:
-    - develop
+  except:
+    - master
   tags:
     - dev-gitlab-runner
 
