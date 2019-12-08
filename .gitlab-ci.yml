@@ -47,7 +47,6 @@ deploy_prod:
     - eb deploy TeamAssignment3-env -l te3-$CI_COMMIT_SHA
   only:
     - master
-  when:
-    - manual
+  when: manual
   tags:
     - prod-gitlab-runner
