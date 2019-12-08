@@ -2,6 +2,8 @@
 
 Final semester project for CMSC435 Fall 2019.
 
+* [Live Deploy Link](http://teamassignment3-env.wripq8ra6y.us-east-1.elasticbeanstalk.com/)
+
 * Milestone 2 commit: 8cf84440863541b334df589a171f70dc91bfbc1c
 
 ## Running the application (Docker)
