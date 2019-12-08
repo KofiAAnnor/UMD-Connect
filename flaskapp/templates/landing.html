@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+ 
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}" >
+    <link href="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/css/bootstrap4-toggle.min.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='landing.css') }}" >
+
+    <title>Welcome</title>
+</head>
+<body class="bg-light">
+    <div class="page-container">
+        <div class="content-wrap">
+            <header class="site-header">
+                <nav class="navbar navbar-expand-md navbar-dark bg-steel fixed-top">
+                    <div class="container">
+                        <a class="navbar-brand mr-4" href="/">UMDConnect</a>
+                        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggle" aria-controls="navbarToggle" aria-expanded="false" aria-label="Toggle navigation">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
+                        <div class="collapse navbar-collapse" id="navbarToggle">
+                            <div class="navbar-nav mr-auto">
+                            </div>
+                            <!-- Navbar Right Side -->
+                            <div class="navbar-nav">
+                            {% if current_user.is_authenticated %}
+                                <a class="nav-item nav-link" href="{{ url_for('new_project') }}">New Project</a>
+                                <!-- <a class="nav-item nav-link" href="{{ url_for('project_board', username=current_user.username) }}">My Projects</a>-->
+                                <a class="nav-item nav-link" href="{{ url_for('profile', username=current_user.username) }}">My Profile</a>
+                                <a class="nav-item nav-link" href="{{ url_for('logout') }}">Logout</a>
+                            {% else %}
+                                <a class="nav-item nav-link" href="{{ url_for('login') }}">Login</a>
+                                <a class="nav-item nav-link" href="{{ url_for('register') }}">Register</a>
+                            {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </nav>
+
+                <div class="container text-center">
+                    <h1>Collaborate on anything</h1>
+                    <p>Set up projects and build your team.</p>
+                    <a class="btn btn-primary" href="{{ url_for('register') }}">Get Started</a>
+                </div>
+            </header>
+
+            <main>
+            </main>
+        </div>
+
+        <footer class="footer">
+            <div class="container">
+                <p>&copy; Team 11 (CMSC435 Fall 2019)</p>
+            </div>
+        </footer>
+    </div>
+</body>
+</html>
