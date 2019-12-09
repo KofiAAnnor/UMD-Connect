@@ -8,7 +8,11 @@ Final semester project for CMSC435 Fall 2019.
 
 ## Testing Continuous Delivery
 
+1. Make a change on a branch other than ```master``` and push to GitLab.
 
+2. Merge your changes into ```master``` using a merge request.
+
+3. Manually deploy your changes to the live website using the GitLab deploy button. (NOte: This can only happen on the ```master``` branch.)
 
 ## Running the application (Docker)
 
