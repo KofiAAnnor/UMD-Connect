@@ -7,7 +7,15 @@ from flaskapp.models import User, Project, ProjectMembers, ProjectImages, Projec
 from flask_login import login_user, current_user, logout_user, login_required
 from PIL import Image
 
+
 @app.route("/")
+def landing():
+    if current_user.is_authenticated:
+        return redirect(url_for('home'))
+    
+    return render_template('landing.html', title="Welcome")
+
+
 @app.route("/home")
 @login_required
 def home():
@@ -74,10 +82,11 @@ def profile(username):
         proj_id = proj.project_id
         user_project = Project.query.filter_by(id=proj_id).first()
         if username == current_user.username:
-            if str(user_project.user_id) == str(current_user.get_id()):
-                user_personal_projects.append(user_project)
-            else:
-                user_collab_projects.append(user_project)
+            if user_project:
+                if str(user_project.user_id) == str(current_user.get_id()):
+                    user_personal_projects.append(user_project)
+                else:
+                    user_collab_projects.append(user_project)
         else:
             if str(user_project.user_id) == str(current_user.get_id()):
                 user_collab_projects.append(user_project)
