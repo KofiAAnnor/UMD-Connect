@@ -7,12 +7,14 @@ from flaskapp.models import User, Project, ProjectMembers, ProjectImages, Projec
 from flask_login import login_user, current_user, logout_user, login_required
 from PIL import Image
 
+
 @app.route("/")
 def landing():
     if current_user.is_authenticated:
         return redirect(url_for('home'))
     
     return render_template('landing.html', title="Welcome")
+
 
 @app.route("/home")
 @login_required

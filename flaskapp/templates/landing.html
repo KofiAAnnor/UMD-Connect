@@ -13,7 +13,7 @@
 
     <title>Welcome</title>
 </head>
-<body class="bg-light">
+<body class="bg-steel">
     <div class="page-container">
         <div class="content-wrap">
             <header class="site-header">
@@ -41,15 +41,14 @@
                         </div>
                     </div>
                 </nav>
-
-                <div class="container text-center">
-                    <h1>Collaborate on anything</h1>
-                    <p>Set up projects and build your team.</p>
-                    <a class="btn btn-primary" href="{{ url_for('register') }}">Get Started</a>
-                </div>
             </header>
 
             <main>
+                <div class="container text-center">
+                    <h1>Collaborate on anything</h1>
+                    <p>Set up projects and build your team.</p>
+                    <a class="btn btn-light action-btn" href="{{ url_for('register') }}">Get Started</a>
+                </div>
             </main>
         </div>
 

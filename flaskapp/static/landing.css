@@ -2,13 +2,17 @@ body {
     margin: 0;
 }
 
+h1, h2, h3, h4, h5, h6, p {
+    color: #fff;
+}
+
 .page-container {
     position: relative;
     min-height: 100vh;
 }
 
 .content-wrap {
-    padding-top: 84px;
+    padding-top: 132px;
     padding-bottom: 2.5rem;    /* Footer height */
 }
 
@@ -18,4 +22,11 @@ body {
     width: 100%;
     height: 2.5rem;
     padding: 10px;
+}
+
+.action-btn {
+    background-color: #fff;
+    color: #5b6f7e;
+    font-weight: bold;
+    margin-top: 20px;
 }
