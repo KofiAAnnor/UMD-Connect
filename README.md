@@ -6,6 +6,14 @@ Final semester project for CMSC435 Fall 2019.
 
 * Milestone 2 commit: 8cf84440863541b334df589a171f70dc91bfbc1c
 
+## Testing Continuous Delivery
+
+1. Make a change on a branch other than ```master``` and push to GitLab.
+
+2. Merge your changes into ```master``` using a merge request.
+
+3. Manually deploy your changes to the live website using the GitLab deploy button. (NOte: This can only happen on the ```master``` branch.)
+
 ## Developer Documentation
 
 ***Software architecture***
@@ -35,7 +43,6 @@ Code is store in the flaskapp directory,
 - show new message automatically without press the refresh button
 
 - notification when there is new message
-
 
 
 ## Running the application (Docker)
