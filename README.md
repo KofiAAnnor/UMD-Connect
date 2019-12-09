@@ -14,6 +14,37 @@ Final semester project for CMSC435 Fall 2019.
 
 3. Manually deploy your changes to the live website using the GitLab deploy button. (NOte: This can only happen on the ```master``` branch.)
 
+## Developer Documentation
+
+***Software architecture***
+
+- run.py: Use command [python run.py] to run the app locally.  
+
+- run_test.py: Contains unit test for the app.  
+
+Code is store in the flaskapp directory, 
+	web design is inside the templates directory under the same directory.
+
+- \_\_init__.py: Initialize the database and the app
+
+- forms.py: All Forms used in the app, including Registraion, Login, 
+         Update Profile, Search (user and project), Create Project.  
+
+- models.py: Format of the User, Project, Project members,
+         Project message, Project images database.  
+
+- routes.py: All routes and functions of the web
+      
+
+***Hypothetical extension***
+
+- search page can redirect to project or user detail from the result
+
+- show new message automatically without press the refresh button
+
+- notification when there is new message
+
+
 ## Running the application (Docker)
 
 *Note*: These steps assume you have docker and docker-compose installed.
